@@ -1,10 +1,13 @@
-const express = require('express');
+require("dotenv").config({ path: "./env/development/app.env" });
+
+const express = require("express");
 const app = express();
 const routes = require("./routes");
 const db = require("./model");
 
 // Connecting to database
-db.sequelize.sync()
+db.sequelize
+  .sync()
   .then(() => {
     console.log("Synced to the database.");
   })

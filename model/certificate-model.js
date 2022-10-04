@@ -1,10 +1,7 @@
 module.exports = (sequelize, DataTypes) => {
-    const certificate = sequelize.define("certificate", {
-      id: {
-        type: DataTypes.UUID,
-        primaryKey: true,
-        autoIncrement: true,
-      },
+  const certificate = sequelize.define(
+    "certificate",
+    {
       author_name: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -17,8 +14,11 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
-    });
-  
-    return certificate;
-  };
-  
+    },
+    {
+      timestamps: false,
+    }
+  );
+
+  return certificate;
+};
