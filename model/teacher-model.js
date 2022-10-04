@@ -1,10 +1,7 @@
 module.exports = (sequelize, DataTypes) => {
-    const teacher = sequelize.define("teacher", {
-      id: {
-        type: DataTypes.UUID,
-        primaryKey: true,
-        autoIncrement: true,
-      },
+  const teacher = sequelize.define(
+    "teacher",
+    {
       name: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -20,8 +17,11 @@ module.exports = (sequelize, DataTypes) => {
         unique: true,
         allowNull: false,
       },
-    });
-  
-    return teacher;
-  };
-  
+    },
+    {
+      timestamps: false,
+    }
+  );
+
+  return teacher;
+};

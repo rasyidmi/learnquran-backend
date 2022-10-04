@@ -1,10 +1,7 @@
 module.exports = (sequelize, DataTypes) => {
-    const task = sequelize.define("task", {
-      id: {
-        type: DataTypes.UUID,
-        primaryKey: true,
-        autoIncrement: true,
-      },
+  const task = sequelize.define(
+    "task",
+    {
       name: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -13,8 +10,11 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.DATE,
         allowNull: false,
       },
-    });
-  
-    return task;
-  };
-  
+    },
+    {
+      timestamps: false,
+    }
+  );
+
+  return task;
+};

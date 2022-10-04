@@ -27,25 +27,34 @@ db.task = require("./task-model.js")(sequelize, Sequelize);
 db.teacher = require("./teacher-model.js")(sequelize, Sequelize);
 
 // Define the associations
-db.teacher.hasMany(db.classes, { foreignKey: "teacher_id", onDelete: 'CASCADE' });
-db.classes.belongsTo(db.teacher);
+db.teacher.hasMany(db.classes, {
+  foreignKey: "teacher_id",
+  onDelete: "CASCADE",
+});
+db.classes.belongsTo(db.teacher, { foreignKey: "teacher_id" });
 
-db.student.belongsToMany(db.classes, { through: 'StudentAndClass' });
-db.classes.belongsToMany(db.student, { through: 'StudentAndClass' });
+db.student.belongsToMany(db.classes, { through: "StudentAndClass" });
+db.classes.belongsToMany(db.student, { through: "StudentAndClass" });
 
-db.student.hasMany(db.certificate, { foreignKey: "student_id", onDelete: 'CASCADE' });
-db.classes.belongsTo(db.teacher);
+db.student.hasMany(db.certificate, {
+  foreignKey: "student_id",
+  onDelete: "CASCADE",
+});
+db.certificate.belongsTo(db.student, { foreignKey: "student_id" });
 
-db.classes.hasMany(db.task, { foreignKey: "class_id", onDelete: 'CASCADE' });
-db.task.belongsTo(db.classes);
+db.classes.hasMany(db.task, { foreignKey: "class_id", onDelete: "CASCADE" });
+db.task.belongsTo(db.classes, { foreignKey: "class_id" });
 
-db.task.hasMany(db.submission, { foreignKey: "task_id", onDelete: 'CASCADE' });
-db.submission.belongsTo(db.task);
+db.task.hasMany(db.submission, { foreignKey: "task_id", onDelete: "CASCADE" });
+db.submission.belongsTo(db.task, { foreignKey: "task_id" });
 
-db.student.belongsToMany(db.submission, { through: 'StudentAndSubmission' });
-db.submission.belongsToMany(db.student, { through: 'StudentAndSubmission' });
+db.student.belongsToMany(db.submission, { through: "StudentAndSubmission" });
+db.submission.belongsToMany(db.student, { through: "StudentAndSubmission" });
 
-db.teacher.hasMany(db.submission, { foreignKey: "teacher_id", onDelete: 'CASCADE' });
-db.submission.belongsTo(db.teacher);
+db.teacher.hasMany(db.submission, {
+  foreignKey: "teacher_id",
+  onDelete: "CASCADE",
+});
+db.submission.belongsTo(db.teacher, { foreignKey: "teacher_id" });
 
 module.exports = db;

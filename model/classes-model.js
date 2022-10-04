@@ -1,10 +1,7 @@
 module.exports = (sequelize, DataTypes) => {
-    const classes = sequelize.define("classes", {
-      id: {
-        type: DataTypes.UUID,
-        primaryKey: true,
-        autoIncrement: true,
-      },
+  const classes = sequelize.define(
+    "classes",
+    {
       name: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -13,8 +10,11 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
-    });
-  
-    return classes;
-  };
-  
+    },
+    {
+      timestamps: false,
+    }
+  );
+
+  return classes;
+};
