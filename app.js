@@ -4,6 +4,7 @@ const express = require("express");
 const app = express();
 const routes = require("./src/routes");
 const db = require("./src/model");
+const authorizationMiddleware = require("./src/middlewares/authorization");
 const firebaseAdmin = require("firebase-admin");
 const firebaseCredential = require("./serviceAccountKey.json");
 
@@ -24,6 +25,7 @@ db.sequelize
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(authorizationMiddleware);
 app.use("/", routes);
 
 module.exports = app;

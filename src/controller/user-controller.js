@@ -50,10 +50,7 @@ class UserController {
       return res.status(200).json(response);
     } catch (error) {
       console.log(error);
-      response.message = error;
-      response.request.type = "POST";
-      response.request.url = req.originalUrl;
-      return res.status(404).json(response);
+      return res.status(404).json({ message: response });
     }
   }
 }
