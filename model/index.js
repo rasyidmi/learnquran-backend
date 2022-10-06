@@ -48,8 +48,11 @@ db.task.belongsTo(db.classes, { foreignKey: "class_id" });
 db.task.hasMany(db.submission, { foreignKey: "task_id", onDelete: "CASCADE" });
 db.submission.belongsTo(db.task, { foreignKey: "task_id" });
 
-db.student.belongsToMany(db.submission, { through: "StudentAndSubmission" });
-db.submission.belongsToMany(db.student, { through: "StudentAndSubmission" });
+db.student.hasMany(db.submission, {
+  foreignKey: "student_id",
+  onDelete: "CASCADE",
+});
+db.submission.belongsTo(db.student, { foreignKey: "student_id" });
 
 db.teacher.hasMany(db.submission, {
   foreignKey: "teacher_id",

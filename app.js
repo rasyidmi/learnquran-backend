@@ -7,15 +7,16 @@ const db = require("./model");
 
 // Connecting to database
 db.sequelize
-  .sync()
+  .sync({ force: true })
   .then(() => {
-    console.log("Synced to the database.");
+    console.log("Success sync to the database.");
   })
   .catch((err) => {
     console.log("Failed to sync database: " + err.message);
   });
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use("/", routes);
 
 module.exports = app;

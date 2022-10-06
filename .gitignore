@@ -1,3 +1,11 @@
+# Node package
 node_modules
+
+# Environment
 env
+
+# For mac user
 .DS_Store
+
+# Firebase credential
+serviceAccountKey.json
