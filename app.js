@@ -4,10 +4,17 @@ const express = require("express");
 const app = express();
 const routes = require("./src/routes");
 const db = require("./src/model");
+const firebaseAdmin = require("firebase-admin");
+const firebaseCredential = require("./serviceAccountKey.json");
+
+// Initialize firebase admin
+firebaseAdmin.initializeApp({
+  credential: firebaseAdmin.credential.cert(firebaseCredential),
+});
 
 // Connecting to database
 db.sequelize
-  .sync({ force: true })
+  .sync()
   .then(() => {
     console.log("Success sync to the database.");
   })

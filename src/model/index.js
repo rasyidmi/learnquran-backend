@@ -19,6 +19,7 @@ const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
+// Assign the model to db variable
 db.certificate = require("./certificate-model.js")(sequelize, Sequelize);
 db.classes = require("./classes-model.js")(sequelize, Sequelize);
 db.student = require("./student-model.js")(sequelize, Sequelize);
