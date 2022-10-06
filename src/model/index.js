@@ -33,8 +33,16 @@ db.teacher.hasMany(db.classes, {
 });
 db.classes.belongsTo(db.teacher, { foreignKey: "teacher_id" });
 
-db.student.belongsToMany(db.classes, { through: "StudentAndClass" });
-db.classes.belongsToMany(db.student, { through: "StudentAndClass" });
+db.student.belongsToMany(db.classes, {
+  through: "StudentAndClass",
+  foreignKey: "student_id",
+  timestamps: false,
+});
+db.classes.belongsToMany(db.student, {
+  through: "StudentAndClass",
+  foreignKey: "class_id",
+  timestamps: false,
+});
 
 db.student.hasMany(db.certificate, {
   foreignKey: "student_id",

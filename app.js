@@ -2,8 +2,8 @@ require("dotenv").config({ path: "./env/development/app.env" });
 
 const express = require("express");
 const app = express();
-const routes = require("./routes");
-const db = require("./model");
+const routes = require("./src/routes");
+const db = require("./src/model");
 
 // Connecting to database
 db.sequelize
