@@ -7,9 +7,9 @@ const errorHandler = (err, req, res, next) => {
         message: "Data already existed.",
         field: err.fields,
       });
-
     default:
-      return res.status(500).json({ message: "Internal server error." });
+      const message = err.message || "Internal server error.";
+      return res.status(500).json({ message: message });
   }
 };
 
