@@ -4,11 +4,8 @@ const teacherModel = require("../model/index").teacher;
 const Response = require("../dto/response");
 
 class UserController {
-  static async get(req, res) {
-    return res.status(200).json({
-      message: "Success",
-      request: { type: "GET", url: req.originalUrl },
-    });
+  static async login(req, res, next) {
+    
   }
 
   static async reigsterUser(req, res, next) {
