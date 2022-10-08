@@ -11,7 +11,7 @@ class UserController {
     });
   }
 
-  static async createUser(req, res) {
+  static async reigsterUser(req, res, next) {
     const body = req.body;
 
     var response = new Response();
@@ -38,9 +38,9 @@ class UserController {
         gender: body.gender,
       };
       if (req.query.condition == 0) {
-        studentModel.create(newUser);
+        await studentModel.create(newUser);
       } else {
-        teacherModel.create(newUser);
+        await teacherModel.create(newUser);
       }
 
       response.message = "The system successfully in creating a new user.";
@@ -49,8 +49,8 @@ class UserController {
       response.url = req.originalUrl;
       return res.status(200).json(response);
     } catch (error) {
-      console.log(error);
-      return res.status(404).json({ message: response });
+      await firebaseAdmin.auth().deleteUser(firebaseUser.uid);
+      next(error);
     }
   }
 }

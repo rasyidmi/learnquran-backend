@@ -5,6 +5,7 @@ const app = express();
 const routes = require("./src/routes");
 const db = require("./src/model");
 const authorizationMiddleware = require("./src/middlewares/authorization");
+const errorHandler = require("./src/middlewares/error-handler");
 const firebaseAdmin = require("firebase-admin");
 const firebaseCredential = require("./serviceAccountKey.json");
 
@@ -27,5 +28,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(authorizationMiddleware);
 app.use("/", routes);
+app.use(errorHandler);
 
 module.exports = app;
