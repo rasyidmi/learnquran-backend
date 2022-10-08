@@ -1,8 +1,7 @@
 class Response {
-    message = "";
-    results = [];
-    type = "";
-    url = "";
-  }
-  
-module.exports = Response; 
+  message = "";
+  results = [];
+  type = "";
+}
+
+module.exports = Response;
