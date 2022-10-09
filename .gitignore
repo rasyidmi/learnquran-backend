@@ -8,4 +8,4 @@ env
 .DS_Store
 
 # Firebase credential
-serviceAccountKey.json
+# serviceAccountKey.json
