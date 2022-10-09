@@ -6,7 +6,7 @@ on:
 
 env:
   PROJECT_ID: tekmob2022-belajarquran-dev
-  SERVICE: belajarquran-dev-1
+  SERVICE: learquran-dev-1
   REGION: asia-southeast1
 
 jobs:
