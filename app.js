@@ -1,10 +1,5 @@
-var firebaseCredential;
 if (process.env.ENV != "dev") {
   require("dotenv").config({ path: "./env/development/app.env" });
-  firebaseCredential = require("./serviceAccountKey.json");
-} else {
-  const base64 = require("base-64");
-  firebaseCredential = base64.decode(process.env.FB_SERVICE_ACCOUNT);
 }
 const express = require("express");
 const app = express();
@@ -12,6 +7,7 @@ const routes = require("./src/routes");
 const db = require("./src/model");
 const authorizationMiddleware = require("./src/middlewares/authorization");
 const errorHandler = require("./src/middlewares/error-handler");
+const firebaseCredential = require("./serviceAccountKey.json");
 const firebaseAdmin = require("firebase-admin");
 const firebase = require("firebase/app");
 
