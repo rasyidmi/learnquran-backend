@@ -1,5 +1,11 @@
-require("dotenv").config({ path: "./env/development/app.env" });
-
+var firebaseCredential;
+if (process.env.ENV != "dev") {
+  require("dotenv").config({ path: "./env/development/app.env" });
+  firebaseCredential = require("./serviceAccountKey.json");
+} else {
+  const base64 = require("base-64");
+  firebaseCredential = base64.decode(process.env.FB_SERVICE_ACCOUNT);
+}
 const express = require("express");
 const app = express();
 const routes = require("./src/routes");
@@ -8,7 +14,6 @@ const authorizationMiddleware = require("./src/middlewares/authorization");
 const errorHandler = require("./src/middlewares/error-handler");
 const firebaseAdmin = require("firebase-admin");
 const firebase = require("firebase/app");
-const firebaseCredential = require("./serviceAccountKey.json");
 
 // Initialize firebase admin
 firebaseAdmin.initializeApp({
@@ -17,13 +22,13 @@ firebaseAdmin.initializeApp({
 
 // Initialize firebase app
 const firebaseConfig = {
-  apiKey: "AIzaSyAxNirzHCUNaw68ahXwn9aQj_LZGo_brQc",
-  authDomain: "belajarquran.firebaseapp.com",
-  projectId: "belajarquran",
-  storageBucket: "belajarquran.appspot.com",
-  messagingSenderId: "365522424050",
-  appId: "1:365522424050:web:94963302a14b366a2f806b",
-  measurementId: "G-3SRSZ7KLWT"
+  apiKey: process.env.FB_API_KEY,
+  authDomain: process.env.FB_AUTH_DOMAIN,
+  projectId: process.env.FB_PROJECT_ID,
+  storageBucket: process.env.FB_STORAGE_BUCKET,
+  messagingSenderId: process.env.FB_MESSAGING_SENDER_ID,
+  appId: process.env.FB_APP_ID,
+  measurementId: process.env.FB_MEASUREMENT_ID,
 };
 
 const firebaseApp = firebase.initializeApp(firebaseConfig);
