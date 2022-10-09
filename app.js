@@ -1,6 +1,8 @@
 var firebaseCredential;
 if (process.env.ENV != "dev") {
   require("dotenv").config({ path: "./env/development/app.env" });
+  firebaseCredential = require("./serviceAccountKey.json");
+} else {
   firebaseCredential = {
     type: "service_account",
     project_id: "belajarquran",
@@ -15,8 +17,6 @@ if (process.env.ENV != "dev") {
     client_x509_cert_url:
       "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-8ttha%40belajarquran.iam.gserviceaccount.com",
   };
-} else {
-  firebaseCredential = require("./serviceAccountKey.json");
 }
 const express = require("express");
 const app = express();
