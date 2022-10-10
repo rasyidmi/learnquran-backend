@@ -1,22 +1,5 @@
-var firebaseCredential;
 if (process.env.ENV != "dev") {
   require("dotenv").config({ path: "./env/development/app.env" });
-  firebaseCredential = require("./serviceAccountKey.json");
-} else {
-  firebaseCredential = {
-    type: "service_account",
-    project_id: "belajarquran",
-    private_key_id: process.env.FB_CRED_PRIVATE_KEY_ID,
-    private_key: process.env.FB_PRIVATE_KEY,
-    client_email:
-      "firebase-adminsdk-8ttha@belajarquran.iam.gserviceaccount.com",
-    client_id: "117231822952764253870",
-    auth_uri: "https://accounts.google.com/o/oauth2/auth",
-    token_uri: "https://oauth2.googleapis.com/token",
-    auth_provider_x509_cert_url: "https://www.googleapis.com/oauth2/v1/certs",
-    client_x509_cert_url:
-      "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-8ttha%40belajarquran.iam.gserviceaccount.com",
-  };
 }
 const express = require("express");
 const app = express();
@@ -24,7 +7,7 @@ const routes = require("./src/routes");
 const db = require("./src/model");
 const authorizationMiddleware = require("./src/middlewares/authorization");
 const errorHandler = require("./src/middlewares/error-handler");
-
+const firebaseCredential = JSON.parse(process.env.FB_CRED);
 const firebaseAdmin = require("firebase-admin");
 const firebase = require("firebase/app");
 
