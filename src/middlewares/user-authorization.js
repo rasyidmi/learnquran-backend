@@ -1,10 +1,10 @@
-const firebaseAuth = require("firebase/auth");
+const firebaseAdmin = require("firebase-admin");
 
 const userAuthorization = (req, res, next) => {
-  const currentUser = firebaseAuth.getAuth().currentUser;
+  const token = firebaseAdmin.auth().verifyIdToken(req.header("user-token"));
 
-  if (currentUser != null) {
-    currentUser.getIdToken();
+  if (token != null) {
+    next();
   } else {
     return res.status(401).json({ message: "Unauthorized" });
   }
