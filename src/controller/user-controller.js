@@ -47,8 +47,41 @@ class UserController {
   }
 
   static async deleteUser(req, res, next) {
-    if (req.query.condition == 0) {
-      await studentModel.findOne()
+    const userId = req.body.id;
+
+    try {
+      if (req.query.condition == 0) {
+        const studentInstance = await studentModel.findOne({
+          where: {
+            id: userId,
+          },
+        });
+        if (studentInstance != null) {
+          await studentInstance.destroy();
+          await firebaseAdmin.auth().deleteUser(userId);
+        } else {
+          return res.status(404).json({ message: "User not found." });
+        }
+      } else {
+        const teacherInstance = await teacherModel.findOne({
+          where: {
+            id: userId,
+          },
+        });
+        if (teacherInstance != null) {
+          await teacherInstance.destroy();
+          await firebaseAdmin.auth().deleteUser(userId);
+        } else {
+          return res.status(404).json({ message: "User not found." });
+        }
+      }
+
+      response.message = "The system successfully in deleting a user.";
+      response.results = { id: userId };
+      response.type = "DELETE";
+      return res.status(200).json(response);
+    } catch (error) {
+      next(error);
     }
   }
 }
