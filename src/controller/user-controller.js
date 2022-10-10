@@ -45,6 +45,12 @@ class UserController {
       next(error);
     }
   }
+
+  static async deleteUser(req, res, next) {
+    if (req.query.condition == 0) {
+      await studentModel.findOne()
+    }
+  }
 }
 
 module.exports = UserController;
