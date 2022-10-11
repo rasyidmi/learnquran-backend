@@ -1,5 +1,8 @@
+const sequelize = require("sequelize");
+
 const teacherModel = require("../model/index").teacher;
 const classModel = require("../model/index").classes;
+
 const Response = require("../dto/response");
 var response = new Response();
 
@@ -17,10 +20,9 @@ class ClassController {
         return res.status(404).json({ message: "User is not a teacher" });
       }
 
-      const createdClass = await classModel.create({
+      const createdClass = await teacher.createClass({
         name: body.name,
         capacity: body.capacity,
-        teacher_id: body.user_id,
       });
       if (createdClass != null) {
         response.message = "The system successfully in creating a class.";
@@ -56,10 +58,10 @@ class ClassController {
 
   static async getAllClass(req, res, next) {
     try {
-      const allClass = await classModel.findAll();
+      const allClasses = await classModel.findAll();
 
       response.message = "The system successfully in getting all classes.";
-      response.results = { data: allClass, total: allClass.length };
+      response.results = { data: allClasses, total: allClasses.length };
       response.type = "GET";
       return res.status(200).json(response);
     } catch (error) {
@@ -67,8 +69,25 @@ class ClassController {
     }
   }
 
-  static async searchClasses(req,res, next) {
-    
+  static async searchClasses(req, res, next) {
+    const keyword = req.query.keyword;
+    try {
+      // Search classes by their name.
+      const fetchedClasses = await classModel.findAll({
+        where: {
+          name: {
+            [sequelize.Op.iLike]: `${keyword}%`,
+          },
+        },
+      });
+
+      response.message = "The system successfully in getting classes.";
+      response.results = { data: fetchedClasses, total: fetchedClasses.length };
+      response.type = "GET";
+      return res.status(200).json(response);
+    } catch (error) {
+      next(error);
+    }
   }
 }
 
