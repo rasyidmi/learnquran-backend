@@ -1,7 +1,6 @@
 const teacherModel = require("../model/index").teacher;
 const classModel = require("../model/index").classes;
 const Response = require("../dto/response");
-const classesModel = require("../model/classes-model");
 var response = new Response();
 
 class ClassController {
