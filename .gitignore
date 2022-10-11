@@ -7,5 +7,5 @@ env
 # For mac user
 .DS_Store
 
-# Firebase credential
-serviceAccountKey.json
+# VS Code
+.vscode
