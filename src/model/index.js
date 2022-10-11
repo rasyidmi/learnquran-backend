@@ -21,7 +21,7 @@ db.sequelize = sequelize;
 
 // Assign the model to db variable
 db.certificate = require("./certificate-model.js")(sequelize, Sequelize);
-db.classes = require("./classes-model.js")(sequelize, Sequelize);
+db.classes = require("./class-model.js")(sequelize, Sequelize);
 db.student = require("./student-model.js")(sequelize, Sequelize);
 db.submission = require("./submission-model.js")(sequelize, Sequelize);
 db.task = require("./task-model.js")(sequelize, Sequelize);

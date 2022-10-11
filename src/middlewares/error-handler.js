@@ -10,9 +10,9 @@ const errorHandler = (err, req, res, next) => {
     case "UserAlreadyExists":
       return res.status(400).json({
         message: "User already existed.",
-      }); 
+      });
     default:
-      const message = err.message || "Internal server error.";
+      const message = "Internal server error.";
       return res.status(500).json({ message: message });
   }
 };

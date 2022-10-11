@@ -5,7 +5,7 @@ const userAuthorization = async (req, res, next) => {
   if (userToken != null && userToken != "") {
     firebaseAdmin
       .auth()
-      .verifyIdToken(req.header("user-token"))
+      .verifyIdToken(userToken)
       .then((decodedToken) => {
         const userId = decodedToken.uid;
         req.body.user_id = userId;
