@@ -11,6 +11,7 @@ class ClassController {
     const body = req.body;
 
     try {
+      // Check if the current user is teacher or not.
       const teacher = await teacherModel.findOne({
         where: {
           id: body.user_id,
@@ -85,6 +86,63 @@ class ClassController {
       response.results = { data: fetchedClasses, total: fetchedClasses.length };
       response.type = "GET";
       return res.status(200).json(response);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async getClassDetail(req, res, next) {
+    const classId = req.params.id;
+
+    try {
+      const fetchedClass = await classModel.findOne({
+        where: {
+          id: classId,
+        },
+      });
+      if (fetchedClass != null) {
+        response.message = "The system successfully in getting a class.";
+        response.results = fetchedClass;
+        response.type = "GET";
+        return res.status(200).json(response);
+      } else {
+        return res.status(404).json({ message: "Class not found." });
+      }
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async updateClass(req, res, next) {
+    const body = req.body;
+
+    try {
+      // Check if the current user is teacher or not.
+      const teacher = await teacherModel.findOne({
+        where: {
+          id: body.user_id,
+        },
+      });
+      if (teacher == null) {
+        return res.status(404).json({ message: "User is not a teacher" });
+      }
+
+      const updatedClass = await classModel.update(
+        {
+          name: body.name,
+          capacity: body.capacity,
+        },
+        {
+          where: {
+            id: req.params.id,
+          },
+        }
+      );
+      if (updatedClass != null) {
+        response.message = "The system successfully in updating a class.";
+        response.type = "PUT";
+        return res.status(200).json(response);
+      }
     } catch (error) {
       next(error);
     }
