@@ -4,9 +4,9 @@
 
 Belajarquran
 
-An application for Mobile Technology subject in University of Indonesia Faculty Computer Science.
+An application for Mobile Technology subject in the University of Indonesia Faculty of Computer Science.
 
-This application will connect Ustadz (teacher) and Murid (student), so the students can learn how to read Quran better. The method is the teacher can makes several tasks for the students, and then the students will upload their voice recording of reading The Quran that will be assessed by the teacher.
+This application will connect Ustadz (teacher) and Siswa (student), so the students can learn how to read Quran better. The teacher can make several tasks for the students, and then the students will upload their voice recordings of reading The Quran that the teacher will assess.
 
 Author:
 1. Andhika Galih
