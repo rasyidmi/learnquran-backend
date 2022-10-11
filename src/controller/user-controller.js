@@ -8,7 +8,6 @@ class UserController {
   static async reigsterUser(req, res, next) {
     const body = req.body;
 
-    var firebaseUser;
     await firebaseAdmin
       .auth()
       .createUser({
@@ -16,13 +15,12 @@ class UserController {
         password: body.password,
       })
       .then(async (user) => {
-        firebaseUser = user;
         console.log(`Success creating new user: ${body.email_address}`);
 
         // Check whether it is a student or teacher
         // 0 for student, 1 for teacher
         const newUser = {
-          id: firebaseUser.uid,
+          id: user.uid,
           name: body.name,
           email_address: body.email_address,
           phone_number: body.phone_number,
@@ -41,7 +39,7 @@ class UserController {
           response.type = "POST";
           return res.status(200).json(response);
         } catch (error) {
-          await firebaseAdmin.auth().deleteUser(firebaseUser.uid);
+          await firebaseAdmin.auth().deleteUser(user.uid);
           next(error);
         }
       })
