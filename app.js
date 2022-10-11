@@ -28,7 +28,7 @@ db.sequelize
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(authorizationMiddleware);
-app.use("/", routes);
+app.use(process.env.URL_PREFIX, routes);
 app.use(errorHandler);
 
 module.exports = app;

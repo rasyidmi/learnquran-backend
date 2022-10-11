@@ -5,5 +5,6 @@ const router = express.Router();
 
 router.use(userAuthorization);
 router.post("/create", classController.createClass);
+router.get("/:id", classController.getClassDetail)
 
 module.exports = router;
