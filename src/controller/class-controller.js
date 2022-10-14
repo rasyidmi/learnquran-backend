@@ -36,27 +36,6 @@ class ClassController {
     }
   }
 
-  static async getClassDetail(req, res, next) {
-    const classId = req.params.id;
-    try {
-      const fetchedClass = await classModel.findOne({
-        where: {
-          id: classId,
-        },
-      });
-      if (fetchedClass != null) {
-        response.message = "The system successfully in getting a class.";
-        response.results = fetchedClass;
-        response.type = "GET";
-        return res.status(200).json(response);
-      } else {
-        return res.status(404).json({ message: "Class not found." });
-      }
-    } catch (error) {
-      next(error);
-    }
-  }
-
   static async getAllClass(req, res, next) {
     try {
       const allClasses = await classModel.findAll();
