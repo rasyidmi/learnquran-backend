@@ -4,7 +4,6 @@ const teacherModel = require("../model/index").teacher;
 const classModel = require("../model/index").classes;
 
 const Response = require("../dto/response");
-var response = new Response();
 
 class ClassController {
   static async createClass(req, res, next) {
@@ -26,9 +25,10 @@ class ClassController {
         capacity: body.capacity,
       });
       if (createdClass != null) {
-        response.message = "The system successfully in creating a class.";
-        response.results = createdClass;
-        response.type = "POST";
+        const response = Response.postResponse(
+          "The system successfully in creating a class.",
+          createdClass
+        );
         return res.status(200).json(response);
       }
     } catch (error) {
@@ -40,9 +40,10 @@ class ClassController {
     try {
       const allClasses = await classModel.findAll();
 
-      response.message = "The system successfully in getting all classes.";
-      response.results = { data: allClasses, total: allClasses.length };
-      response.type = "GET";
+      const response = Response.getResponse(
+        "The system successfully in getting all classes.",
+        { data: allClasses, total: allClasses.length }
+      );
       return res.status(200).json(response);
     } catch (error) {
       next(error);
@@ -60,10 +61,10 @@ class ClassController {
           },
         },
       });
-
-      response.message = "The system successfully in getting classes.";
-      response.results = { data: fetchedClasses, total: fetchedClasses.length };
-      response.type = "GET";
+      const response = Response.getResponse(
+        "The system successfully in getting classes.",
+        { data: fetchedClasses, total: fetchedClasses.length }
+      );
       return res.status(200).json(response);
     } catch (error) {
       next(error);
@@ -80,9 +81,10 @@ class ClassController {
         },
       });
       if (fetchedClass != null) {
-        response.message = "The system successfully in getting a class.";
-        response.results = fetchedClass;
-        response.type = "GET";
+        const response = Response.getResponse(
+          "The system successfully in getting a class.",
+          fetchedClass
+        );
         return res.status(200).json(response);
       } else {
         return res.status(404).json({ message: "Class not found." });
@@ -118,8 +120,10 @@ class ClassController {
         }
       );
       if (updatedClass != null) {
-        response.message = "The system successfully in updating a class.";
-        response.type = "PUT";
+        const response = Response.putResponse(
+          "The system successfully in updating a class.",
+          updatedClass
+        );
         return res.status(200).json(response);
       }
     } catch (error) {

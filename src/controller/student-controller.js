@@ -3,7 +3,6 @@ const classModel = require("../model/index").classes;
 const submissionModel = require("../model/index").submission;
 
 const Response = require("../dto/response");
-var response = new Response();
 
 class StudentController {
   static async enrollClass(req, res, next) {
@@ -28,13 +27,14 @@ class StudentController {
       if (totalStudent + 1 <= classInstance.dataValues.capacity) {
         // Assign the user to the desired class.
         await user.addClass(classInstance);
-        response.message =
-          "The system successfully enroll the user to the desired class.";
-        response.results = {
-          user_id: userId,
-          clsas_id: classId,
-        };
-        response.type = "PUT";
+
+        const response = Response.putResponse(
+          "The system successfully enroll the user to the desired class.",
+          {
+            user_id: userId,
+            clsas_id: classId,
+          }
+        );
         return res.status(200).json(response);
       } else {
         return res.status(400).json({ message: "Class is overloaded" });
@@ -70,13 +70,13 @@ class StudentController {
           class_id: classInstance.dataValues.id,
         },
       });
-      response.message =
-        "The system successfully unenroll the user from the desired class.";
-      response.results = {
-        user_id: userId,
-        clsas_id: classId,
-      };
-      response.type = "PUT";
+      const response = Response.putResponse(
+        "The system successfully unenroll the user from the desired class.",
+        {
+          user_id: userId,
+          clsas_id: classId,
+        }
+      );
       return res.status(200).json(response);
     } catch (error) {
       next(error);
