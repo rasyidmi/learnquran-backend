@@ -73,7 +73,6 @@ class ClassController {
 
   static async getClassDetail(req, res, next) {
     const classId = req.params.id;
-
     try {
       const fetchedClass = await classModel.findOne({
         where: {
@@ -81,10 +80,75 @@ class ClassController {
         },
       });
       if (fetchedClass != null) {
+        response.message = "The system successfully in getting a class.";
+        response.results = fetchedClass;
+        response.type = "GET";
+        return res.status(200).json(response);
+      } else {
+        return res.status(404).json({ message: "Class not found." });
+      }
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async getAllClass(req, res, next) {
+    try {
+      const allClasses = await classModel.findAll();
+
+      response.message = "The system successfully in getting all classes.";
+      response.results = { data: allClasses, total: allClasses.length };
+      response.type = "GET";
+      return res.status(200).json(response);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async searchClasses(req, res, next) {
+    const keyword = req.query.keyword;
+    try {
+      // Search classes by their name.
+      const fetchedClasses = await classModel.findAll({
+        where: {
+          name: {
+            [sequelize.Op.iLike]: `${keyword}%`,
+          },
+        },
+      });
+
+<<<<<<< HEAD
+=======
+      response.message = "The system successfully in getting classes.";
+      response.results = { data: fetchedClasses, total: fetchedClasses.length };
+      response.type = "GET";
+      return res.status(200).json(response);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async getClassDetail(req, res, next) {
+    const classId = req.params.id;
+
+>>>>>>> 0bffcdf8118b03c85f001aead84d73c845e730ce
+    try {
+      const fetchedClass = await classModel.findOne({
+        where: {
+          id: classId,
+        },
+      });
+      if (fetchedClass != null) {
+<<<<<<< HEAD
         const response = Response.getResponse(
           "The system successfully in getting a class.",
           fetchedClass
         );
+=======
+        response.message = "The system successfully in getting a class.";
+        response.results = fetchedClass;
+        response.type = "GET";
+>>>>>>> 0bffcdf8118b03c85f001aead84d73c845e730ce
         return res.status(200).json(response);
       } else {
         return res.status(404).json({ message: "Class not found." });
@@ -120,9 +184,14 @@ class ClassController {
         }
       );
       if (updatedClass != null) {
+<<<<<<< HEAD
         const response = Response.putResponse(
           "The system successfully in updating a class.",
         );
+=======
+        response.message = "The system successfully in updating a class.";
+        response.type = "PUT";
+>>>>>>> 0bffcdf8118b03c85f001aead84d73c845e730ce
         return res.status(200).json(response);
       }
     } catch (error) {
