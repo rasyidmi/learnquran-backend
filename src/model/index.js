@@ -69,4 +69,11 @@ db.teacher.hasMany(db.submission, {
 });
 db.submission.belongsTo(db.teacher, { foreignKey: "teacher_id" });
 
+db.classes.hasMany(db.submission, {
+  foreignKey: "class_id",
+  onDelete: "CASCADE",
+})
+db.submission.belongsTo(db.classes, { foreignKey: "class_id" });
+
+
 module.exports = db;
