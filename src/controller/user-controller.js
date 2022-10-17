@@ -2,7 +2,6 @@ const firebaseAdmin = require("firebase-admin");
 const studentModel = require("../model/index").student;
 const teacherModel = require("../model/index").teacher;
 const Response = require("../dto/response");
-var response = new Response();
 
 class UserController {
   static async reigsterUser(req, res, next) {
@@ -34,9 +33,10 @@ class UserController {
             await teacherModel.create(newUser);
           }
 
-          response.message = "The system successfully in creating a new user.";
-          response.results = newUser;
-          response.type = "POST";
+          const response = Response.postResponse(
+            "The system successfully in creating a new user.",
+            newUser
+          );
           return res.status(200).json(response);
         } catch (error) {
           await firebaseAdmin.auth().deleteUser(user.uid);
@@ -79,9 +79,10 @@ class UserController {
         }
       }
 
-      response.message = "The system successfully in deleting a user.";
-      response.results = { id: userId };
-      response.type = "DELETE";
+      const response = Response.deleteResponse(
+        "The system successfully in deleting a user.",
+        { id: userId }
+      );
       return res.status(200).json(response);
     } catch (error) {
       next(error);
