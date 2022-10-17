@@ -26,7 +26,7 @@ class ClassController {
       });
       if (createdClass != null) {
         const response = Response.postResponse(
-          "The system successfully in creating a class.",
+          "The system successfully created a class.",
           createdClass
         );
         return res.status(200).json(response);
@@ -41,7 +41,7 @@ class ClassController {
       const allClasses = await classModel.findAll();
 
       const response = Response.getResponse(
-        "The system successfully in getting all classes.",
+        "The system successfully got all class data.",
         { data: allClasses, total: allClasses.length }
       );
       return res.status(200).json(response);
@@ -62,7 +62,7 @@ class ClassController {
         },
       });
       const response = Response.getResponse(
-        "The system successfully in getting classes.",
+        "The system successfully got all class data.",
         { data: fetchedClasses, total: fetchedClasses.length }
       );
       return res.status(200).json(response);
@@ -82,7 +82,7 @@ class ClassController {
       });
       if (fetchedClass != null) {
         const response = Response.getResponse(
-          "The system successfully in getting a class.",
+          "The system successfully got the class data.",
           fetchedClass
         );
         return res.status(200).json(response);
@@ -121,12 +121,31 @@ class ClassController {
       );
       if (updatedClass != null) {
         const response = Response.putResponse(
-          "The system successfully in updating a class.",
+          "The system successfully updated a class."
         );
         return res.status(200).json(response);
       }
     } catch (error) {
       next(error);
+    }
+  }
+
+  static async deleteClass(req, res, next) {
+    const classId = req.params.id;
+    const classInstance = await classModel.findOne({
+      where: {
+        id: classId,
+      },
+    });
+
+    if (classInstance != null) {
+      await classInstance.destroy();
+      const response = Response.deleteResponse(
+        "The system successfully deleted a class."
+      );
+      return res.status(200).json(response);
+    } else {
+      return res.status(404).json({ message: "Class is not found." });
     }
   }
 }
