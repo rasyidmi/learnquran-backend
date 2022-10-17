@@ -122,7 +122,6 @@ class ClassController {
       if (updatedClass != null) {
         const response = Response.putResponse(
           "The system successfully in updating a class.",
-          updatedClass
         );
         return res.status(200).json(response);
       }
