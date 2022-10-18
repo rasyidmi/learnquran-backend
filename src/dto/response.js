@@ -1,12 +1,18 @@
 class Response {
-  message = "";
-  results = [];
-  type = "";
-
+  static getResultsLength(results) {
+    if (results == null) {
+      return 0;
+    } else {
+      return results.length != null ? results.length : 1;
+    }
+  }
   static getResponse(message, results) {
     return {
       message: message,
-      results: results,
+      results: {
+        data: results,
+        total: this.getResultsLength(results),
+      },
       type: "GET",
     };
   }
@@ -14,7 +20,10 @@ class Response {
   static postResponse(message, results) {
     return {
       message: message,
-      results: results,
+      results: {
+        data: results,
+        total: this.getResultsLength(results),
+      },
       type: "POST",
     };
   }
@@ -22,7 +31,10 @@ class Response {
   static putResponse(message, results) {
     return {
       message: message,
-      results: results,
+      results: {
+        data: results,
+        total: this.getResultsLength(results),
+      },
       type: "PUT",
     };
   }
@@ -30,7 +42,10 @@ class Response {
   static deleteResponse(message, results) {
     return {
       message: message,
-      results: results,
+      results: {
+        data: results,
+        total: this.getResultsLength(results),
+      },
       type: "DELETE",
     };
   }
