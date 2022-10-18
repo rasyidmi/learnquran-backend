@@ -1,6 +1,6 @@
-const studentModel = require("../model/index").student;
-const classModel = require("../model/index").classes;
-const submissionModel = require("../model/index").submission;
+const studentModel = require("../models/index").student;
+const classModel = require("../models/index").classes;
+const submissionModel = require("../models/index").submission;
 
 const Response = require("../dto/response");
 
