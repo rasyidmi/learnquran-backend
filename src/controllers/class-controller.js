@@ -1,4 +1,4 @@
-const classHelper = require("../helpers/model-helper/class-helper");
+const modelHelper = require("../helpers/model-helper/class-helper");
 
 const Response = require("../dto/response");
 
@@ -6,7 +6,7 @@ class ClassController {
   static async createClass(req, res, next) {
     const body = req.body;
     try {
-      const createdClass = await classHelper.createClass(
+      const createdClass = await modelHelper.createClass(
         { name: body.name, capacity: body.capacity },
         body.user_id
       );
@@ -25,7 +25,7 @@ class ClassController {
 
   static async getAllClass(req, res, next) {
     try {
-      const allClasses = await classHelper.getAllClasses({ condition: 0 });
+      const allClasses = await modelHelper.getAllClasses({ condition: 0 });
 
       const response = Response.getResponse(
         "The system successfully got all class data.",
@@ -41,7 +41,7 @@ class ClassController {
     const keyword = req.query.keyword;
     try {
       // Search classes by their name.
-      const fetchedClasses = await classHelper.getAllClasses({
+      const fetchedClasses = await modelHelper.getAllClasses({
         condition: 1,
         keyword: keyword,
       });
@@ -58,7 +58,7 @@ class ClassController {
   static async getClassDetail(req, res, next) {
     const classId = req.params.id;
     try {
-      const fetchedClass = await classHelper.getClassDetail(classId);
+      const fetchedClass = await modelHelper.getClassDetail(classId);
 
       if (fetchedClass != null) {
         const response = Response.getResponse(
@@ -87,7 +87,7 @@ class ClassController {
         return res.status(404).json({ message: "User is not a teacher" });
       }
 
-      const updatedClass = await classHelper.updateClass(
+      const updatedClass = await modelHelper.updateClass(
         {
           name: body.name,
           capacity: body.capacity,
@@ -108,7 +108,7 @@ class ClassController {
   static async deleteClass(req, res, next) {
     const classId = req.params.id;
     try {
-      const value = await classHelper.deleteClass(classId);
+      const value = await modelHelper.deleteClass(classId);
       if (value != null) {
         const response = Response.deleteResponse(
           "The system successfully deleted a class."
