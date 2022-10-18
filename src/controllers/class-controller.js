@@ -1,7 +1,4 @@
-const sequelize = require("sequelize");
-
 const teacherModel = require("../models/index").teacher;
-const classModel = require("../models/index").classes;
 const classHelper = require("../helpers/model-helper/class-helper");
 
 const Response = require("../dto/response");
@@ -9,7 +6,6 @@ const Response = require("../dto/response");
 class ClassController {
   static async createClass(req, res, next) {
     const body = req.body;
-
     try {
       // Check if the current user is teacher or not.
       const teacher = await teacherModel.findOne({
@@ -39,7 +35,7 @@ class ClassController {
 
   static async getAllClass(req, res, next) {
     try {
-      const allClasses = await classHelper.getAllClasses();
+      const allClasses = await classHelper.getAllClasses({ condition: 0 });
 
       const response = Response.getResponse(
         "The system successfully got all class data.",
@@ -55,16 +51,13 @@ class ClassController {
     const keyword = req.query.keyword;
     try {
       // Search classes by their name.
-      const fetchedClasses = await classModel.findAll({
-        where: {
-          name: {
-            [sequelize.Op.iLike]: `${keyword}%`,
-          },
-        },
+      const fetchedClasses = await classHelper.getAllClasses({
+        condition: 1,
+        keyword: keyword,
       });
       const response = Response.getResponse(
         "The system successfully got all class data.",
-        { data: fetchedClasses, total: fetchedClasses.length }
+        fetchedClasses
       );
       return res.status(200).json(response);
     } catch (error) {
@@ -74,13 +67,8 @@ class ClassController {
 
   static async getClassDetail(req, res, next) {
     const classId = req.params.id;
-
     try {
-      const fetchedClass = await classModel.findOne({
-        where: {
-          id: classId,
-        },
-      });
+      const fetchedClass = await classHelper.getClassDetail(classId);
 
       if (fetchedClass != null) {
         const response = Response.getResponse(
@@ -98,7 +86,6 @@ class ClassController {
 
   static async updateClass(req, res, next) {
     const body = req.body;
-
     try {
       // Check if the current user is teacher or not.
       const teacher = await teacherModel.findOne({
@@ -110,16 +97,12 @@ class ClassController {
         return res.status(404).json({ message: "User is not a teacher" });
       }
 
-      const updatedClass = await classModel.update(
+      const updatedClass = await classHelper.updateClass(
         {
           name: body.name,
           capacity: body.capacity,
         },
-        {
-          where: {
-            id: req.params.id,
-          },
-        }
+        req.params.id
       );
       if (updatedClass != null) {
         const response = Response.putResponse(
@@ -134,20 +117,18 @@ class ClassController {
 
   static async deleteClass(req, res, next) {
     const classId = req.params.id;
-    const classInstance = await classModel.findOne({
-      where: {
-        id: classId,
-      },
-    });
-
-    if (classInstance != null) {
-      await classInstance.destroy();
-      const response = Response.deleteResponse(
-        "The system successfully deleted a class."
-      );
-      return res.status(200).json(response);
-    } else {
-      return res.status(404).json({ message: "Class is not found." });
+    try {
+      const value = await classHelper.deleteClass(classId);
+      if (value != null) {
+        const response = Response.deleteResponse(
+          "The system successfully deleted a class."
+        );
+        return res.status(200).json(response);
+      } else {
+        return res.status(404).json({ message: "Class is not found." });
+      }
+    } catch (error) {
+      next(error);
     }
   }
 }
