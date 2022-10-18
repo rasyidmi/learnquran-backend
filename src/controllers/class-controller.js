@@ -1,4 +1,3 @@
-const teacherModel = require("../models/index").teacher;
 const classHelper = require("../helpers/model-helper/class-helper");
 
 const Response = require("../dto/response");
@@ -7,27 +6,18 @@ class ClassController {
   static async createClass(req, res, next) {
     const body = req.body;
     try {
-      // Check if the current user is teacher or not.
-      const teacher = await teacherModel.findOne({
-        where: {
-          id: body.user_id,
-        },
-      });
-      if (teacher == null) {
+      const createdClass = await classHelper.createClass(
+        { name: body.name, capacity: body.capacity },
+        body.user_id
+      );
+      if (createdClass == null) {
         return res.status(404).json({ message: "User is not a teacher" });
       }
-
-      const createdClass = await teacher.createClass({
-        name: body.name,
-        capacity: body.capacity,
-      });
-      if (createdClass != null) {
-        const response = Response.postResponse(
-          "The system successfully created a class.",
-          createdClass
-        );
-        return res.status(200).json(response);
-      }
+      const response = Response.postResponse(
+        "The system successfully created a class.",
+        createdClass
+      );
+      return res.status(200).json(response);
     } catch (error) {
       next(error);
     }

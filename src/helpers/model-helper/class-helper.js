@@ -3,6 +3,20 @@ const classModel = require("../../models/index").classes;
 const teacherModel = require("../../models/index").teacher;
 
 class ClassModelHelper {
+  static async createClass(data, teacherId) {
+    const teacher = await teacherModel.findOne({
+      where: {
+        id: teacherId,
+      },
+    });
+    // Check if the current user is teacher or not.
+    if (teacher == null) {
+      return null;
+    }
+
+    const createdClass = await teacher.createClass(data);
+    return createdClass;
+  }
   static async getAllClasses(body) {
     const listClass = [];
     const query = {
