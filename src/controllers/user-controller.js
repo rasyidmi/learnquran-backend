@@ -1,6 +1,6 @@
 const firebaseAdmin = require("firebase-admin");
-const studentModel = require("../model/index").student;
-const teacherModel = require("../model/index").teacher;
+const studentModel = require("../models/index").student;
+const teacherModel = require("../models/index").teacher;
 const Response = require("../dto/response");
 
 class UserController {

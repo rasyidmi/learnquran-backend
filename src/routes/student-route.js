@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const studentController = require("../controller/student-controller");
+const studentController = require("../controllers/student-controller");
 
 // router.use(userAuthorization);
 router.put("/enroll/:id", studentController.enrollClass);

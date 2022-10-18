@@ -1,7 +1,8 @@
 const sequelize = require("sequelize");
 
-const teacherModel = require("../model/index").teacher;
-const classModel = require("../model/index").classes;
+const teacherModel = require("../models/index").teacher;
+const classModel = require("../models/index").classes;
+const classHelper = require("../helpers/model-helper/class-helper");
 
 const Response = require("../dto/response");
 
@@ -38,11 +39,11 @@ class ClassController {
 
   static async getAllClass(req, res, next) {
     try {
-      const allClasses = await classModel.findAll();
+      const allClasses = await classHelper.getAllClasses();
 
       const response = Response.getResponse(
         "The system successfully got all class data.",
-        { data: allClasses, total: allClasses.length }
+        allClasses
       );
       return res.status(200).json(response);
     } catch (error) {
@@ -80,6 +81,7 @@ class ClassController {
           id: classId,
         },
       });
+
       if (fetchedClass != null) {
         const response = Response.getResponse(
           "The system successfully got the class data.",
