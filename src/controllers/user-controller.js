@@ -3,7 +3,7 @@ const modelHelper = require("../helpers/model-helper/user-helper");
 const Response = require("../dto/response");
 
 class UserController {
-  static async reigsterUser(req, res, next) {
+  static async registerUser(req, res, next) {
     const body = req.body;
 
     const firebaseUser = await firebaseHelper.createFirebaseUser(
