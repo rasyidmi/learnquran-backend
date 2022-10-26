@@ -121,6 +121,10 @@ class ClassController {
       next(error);
     }
   }
+
+  static async createTask(req, res, next) {
+    
+  }
 }
 
 module.exports = ClassController;
