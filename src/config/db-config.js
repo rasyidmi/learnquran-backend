@@ -1,5 +1,5 @@
-if (process.env.ENV != "dev")
-  require("dotenv").config({ path: "./env/development/app.env" });
+if (process.env.ENV == null)
+  require("dotenv").config({ path: "./env/local/app.env" });
 
 module.exports = {
   host: process.env.DB_HOST,
