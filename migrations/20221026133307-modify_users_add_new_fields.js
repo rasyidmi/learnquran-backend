@@ -4,7 +4,7 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
     return Promise.all([
-      queryInterface.addColumn("tasks", "description", {
+      queryInterface.changeColumn("tasks", "description", {
         type: Sequelize.TEXT,
         allowNull: false,
         defaultValue: "",
