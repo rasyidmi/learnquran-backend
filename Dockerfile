@@ -9,11 +9,8 @@ RUN --mount=type=secret,id=DB_HOST \
    export DB_NAME=$(cat /run/secrets/DB_NAME) && \
    yarn gen
 ARG ENV=dev
-ARG DB_HOST=${{ secrets.DB_HOST }}
-ARG DB_NAME=${{ secrets.DB_NAME }}
-ARG DB_PWD=${{ secrets.DB_PWD }}
-ARG DB_USER=${{ secrets.DB_USER }}
 
+ENV ENV=$ENV
 ENV DB_HOST=$DB_HOST
 ENV DB_NAME=$DB_NAME
 ENV DB_PWD=$DB_PWD
