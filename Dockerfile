@@ -1,4 +1,5 @@
 # Set env
+ARG ENV=dev
 ARG DB_HOST=${{ secrets.DB_HOST }}
 ARG DB_NAME=${{ secrets.DB_NAME }}
 ARG DB_PWD=${{ secrets.DB_PWD }}
