@@ -1,4 +1,13 @@
 # Set env
+RUN --mount=type=secret,id=DB_HOST \
+  --mount=type=secret,id=DB_USER \
+  --mount=type=secret,id=DB_PWD \
+  --mount=type=secret,id=DB_NAME \
+   export DB_HOST=$(cat /run/secrets/DB_HOST) && \
+   export DB_USER=$(cat /run/secrets/DB_USER) && \
+   export DB_PWD=$(cat /run/secrets/DB_PWD) && \
+   export DB_NAME=$(cat /run/secrets/DB_NAME) && \
+   yarn gen
 ARG ENV=dev
 ARG DB_HOST=${{ secrets.DB_HOST }}
 ARG DB_NAME=${{ secrets.DB_NAME }}
