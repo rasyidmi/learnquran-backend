@@ -8,4 +8,4 @@ RUN npm run migrate
 # Build production image
 FROM dependencies as builder
 EXPOSE 3000
-CMD npm run migrate && npm run start
+CMD npm run start
