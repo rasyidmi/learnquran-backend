@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js",
     "start:local": "nodemon index.js",
-    "migrate":"npx sequelize db:migrate --config ./src/config/db-config.js --models-path /src/models/"
+    "migrate":"npx sequelize db:migrate --config /src/config/db-config.js --models-path /src/models/"
   },
   "repository": {
     "type": "git",
