@@ -1,4 +1,7 @@
-const modelHelper = require("../helpers/model-helper/student-helper");
+const studentModel = require("../models/index").student;
+const classModel = require("../models/index").classes;
+const submissionModel = require("../models/index").submission;
+
 const Response = require("../dto/response");
 
 class StudentController {
@@ -7,19 +10,33 @@ class StudentController {
     const classId = req.params.id;
 
     try {
-      const fetchedData = await modelHelper.enrollClass(userId, classId);
+      const user = await studentModel.findOne({
+        where: {
+          id: userId,
+        },
+      });
+      const classInstance = await classModel.findOne({
+        where: {
+          id: classId,
+        },
+      });
 
-      if (fetchedData != null) {
+      // Check whether the class capacity is enough or not.
+      const totalStudent = await classInstance.countStudents();
+      if (totalStudent + 1 <= classInstance.dataValues.capacity) {
+        // Assign the user to the desired class.
+        await user.addClass(classInstance);
+
         const response = Response.putResponse(
-          "The system successfully enrolled the user in the desired class.",
-          fetchedData
+          "The system successfully enroll the user to the desired class.",
+          {
+            user_id: userId,
+            clsas_id: classId,
+          }
         );
         return res.status(200).json(response);
       } else {
-        return res.status(400).json({
-          message:
-            "Class is overloaded, or user gender is prohibited in the class.",
-        });
+        return res.status(400).json({ message: "Class is overloaded" });
       }
     } catch (error) {
       next(error);
@@ -31,18 +48,34 @@ class StudentController {
     const classId = req.params.id;
 
     try {
-      const fetchedData = await modelHelper.unenrollClass(userId, classId);
+      const user = await studentModel.findOne({
+        where: {
+          id: userId,
+        },
+      });
+      const classInstance = await classModel.findOne({
+        where: {
+          id: classId,
+        },
+      });
 
-      if (fetchedData != null) {
-        const response = Response.putResponse(
-          "The system successfully unenrolled the user from the desired class.",
-          fetchedData
-        );
-        return res.status(200).json(response);
-      }
-      return res
-        .status(400)
-        .json({ message: "The user is not enrolled in the class." });
+      // Unenroll the user.
+      await user.removeClass(classInstance);
+      // Delete all related submissions.
+      await submissionModel.destroy({
+        where: {
+          student_id: userId,
+          class_id: classInstance.dataValues.id,
+        },
+      });
+      const response = Response.putResponse(
+        "The system successfully unenroll the user from the desired class.",
+        {
+          user_id: userId,
+          clsas_id: classId,
+        }
+      );
+      return res.status(200).json(response);
     } catch (error) {
       next(error);
     }
