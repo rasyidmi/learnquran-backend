@@ -5,5 +5,7 @@ const taskController = require("../controllers/task-controller");
 
 if (process.env.ENV) router.use(userAuthorization);
 router.post("/create", taskController.createTask);
+router.delete("/delete/:id", taskController.deleteTask);
+
 
 module.exports = router;

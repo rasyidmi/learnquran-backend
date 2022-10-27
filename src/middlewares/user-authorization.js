@@ -8,7 +8,7 @@ const userAuthorization = async (req, res, next) => {
       .verifyIdToken(userToken)
       .then((decodedToken) => {
         const userId = decodedToken.uid;
-        req.body.user_id = userId;
+        req.query.user_id = userId;
         next();
       })
       .catch((error) => {

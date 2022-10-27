@@ -24,7 +24,28 @@ class TaskController {
       );
       return res.status(200).json(response);
     } catch (error) {
-        next(error);
+      next(error);
+    }
+  }
+
+  static async deleteTask(req, res, next) {
+    const params = req.query;
+    const taskId = req.params.id;
+    const teacherId = params.user_id;
+    const classId = params.class_id;
+
+    try {
+      const value = await modelHelper.deleteTask(teacherId, taskId, classId);
+      if (value != null) {
+        const response = Response.deleteResponse(
+          "The system successfully deleted a task."
+        );
+        return res.status(200).json(response);
+      } else {
+        return res.status(404).json({ message: "Task is not found or the user is not the class teacher." });
+      }
+    } catch (error) {
+      next(error);
     }
   }
 }
