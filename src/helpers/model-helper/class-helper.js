@@ -61,18 +61,19 @@ class ClassModelHelper {
     const classInstance = await classModel.findOne({
       where: {
         id: id,
+        teacher_id: teacherId,
       },
     });
     // Check if the current user is teacher or not.
-    if (classInstance.dataValues.teacher_id != teacherId) return null;
-
-    return await classInstance.update(data);
+    if (classInstance) return await classInstance.update(data);
+    return null;
   }
 
-  static async deleteClass(id) {
+  static async deleteClass(id, teacherId) {
     const classInstance = await classModel.findOne({
       where: {
         id: id,
+        teacher_id: teacherId,
       },
     });
 

@@ -116,25 +116,6 @@ class ClassController {
       next(error);
     }
   }
-
-  static async deleteClass(req, res, next) {
-    const classId = req.params.id;
-    try {
-      const value = await modelHelper.deleteClass(classId);
-      if (value != null) {
-        const response = Response.deleteResponse(
-          "The system successfully deleted a class."
-        );
-        return res.status(200).json(response);
-      } else {
-        return res.status(404).json({ message: "Class is not found." });
-      }
-    } catch (error) {
-      next(error);
-    }
-  }
-
-  static async createTask(req, res, next) {}
 }
 
 module.exports = ClassController;
