@@ -27,6 +27,19 @@ class UserModelHelper {
     }
     return id;
   }
+
+  static async getUserData(id) {
+    const query = {
+      where: {
+        id: id,
+      },
+    };
+
+    const studentInstance = await studentModel.findOne(query);
+    const teacherInstance = await teacherModel.findOne(query);
+    if (studentInstance) return studentInstance;
+    return teacherInstance;
+  }
 }
 
 module.exports = UserModelHelper;
