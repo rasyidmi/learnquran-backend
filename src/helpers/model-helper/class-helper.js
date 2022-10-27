@@ -65,8 +65,14 @@ class ClassModelHelper {
       },
     });
     // Check if the current user is teacher or not.
+<<<<<<< HEAD
     if (classInstance) return await classInstance.update(data);
     return null;
+=======
+    if (classInstance.dataValues.teacher_id != teacherId) return null;
+
+    return await classInstance.update(data);
+>>>>>>> da92e5081d6388e9415f402c02b320bb5ee35659
   }
 
   static async deleteClass(id, teacherId) {
