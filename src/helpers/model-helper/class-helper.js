@@ -57,18 +57,23 @@ class ClassModelHelper {
     });
   }
 
-  static async updateClass(data, id) {
-    return await classModel.update(data, {
-      where: {
-        id: id,
-      },
-    });
-  }
-
-  static async deleteClass(id) {
+  static async updateClass(data, id, teacherId) {
     const classInstance = await classModel.findOne({
       where: {
         id: id,
+        teacher_id: teacherId,
+      },
+    });
+    // Check if the current user is teacher or not.
+    if (classInstance) return await classInstance.update(data);
+    return null;
+  }
+
+  static async deleteClass(id, teacherId) {
+    const classInstance = await classModel.findOne({
+      where: {
+        id: id,
+        teacher_id: teacherId,
       },
     });
 
