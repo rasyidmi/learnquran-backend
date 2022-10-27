@@ -3,6 +3,7 @@ if (process.env.ENV == null) {
 }
 const express = require("express");
 const app = express();
+const cors = require('cors')
 const routes = require("./src/routes");
 const db = require("./src/models");
 const authorizationMiddleware = require("./src/middlewares/authorization");
@@ -27,6 +28,7 @@ db.sequelize
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cors());
 app.use(authorizationMiddleware);
 app.use(process.env.URL_PREFIX, routes);
 app.use(errorHandler);
