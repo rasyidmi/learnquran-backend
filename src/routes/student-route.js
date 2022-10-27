@@ -4,8 +4,8 @@ const router = express.Router();
 const studentController = require("../controllers/student-controller");
 
 if (process.env.ENV) router.use(userAuthorization);
-router.put("/enroll/:id", studentController.enrollClass);
-router.put("/unenroll/:id", studentController.unenrollClass);
+router.post("/enroll/:id", studentController.enrollClass);
+router.post("/unenroll/:id", studentController.unenrollClass);
 
 
 module.exports = router;

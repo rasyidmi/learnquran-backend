@@ -5,11 +5,9 @@ const Response = require("../dto/response");
 class ClassController {
   static async createClass(req, res, next) {
     const body = req.body;
+    const params = req.query;
     try {
-      const createdClass = await modelHelper.createClass(
-        { name: body.name, capacity: body.capacity },
-        body.user_id
-      );
+      const createdClass = await modelHelper.createClass(body, params.user_id);
       if (createdClass == null) {
         return res.status(404).json({ message: "User is not a teacher" });
       }
@@ -76,14 +74,12 @@ class ClassController {
 
   static async updateClass(req, res, next) {
     const body = req.body;
+    const params = req.query;
     try {
       const helperResponse = await modelHelper.updateClass(
-        {
-          name: body.name,
-          capacity: body.capacity,
-        },
+        body,
         req.params.id,
-        body.user_id
+        params.user_id
       );
 
       if (helperResponse == null)
@@ -102,8 +98,9 @@ class ClassController {
 
   static async deleteClass(req, res, next) {
     const classId = req.params.id;
+    const teacherId = req.query.user_id;
     try {
-      const value = await modelHelper.deleteClass(classId);
+      const value = await modelHelper.deleteClass(classId, teacherId);
       if (value != null) {
         const response = Response.deleteResponse(
           "The system successfully deleted a class."
