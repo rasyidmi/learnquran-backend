@@ -1,4 +1,5 @@
 const classModel = require("../../models/index").classes;
+const taskModel = require("../../models/index").task;
 
 class TaskModelHelper {
   static async createTask(data, classId, teacherId) {
@@ -24,6 +25,31 @@ class TaskModelHelper {
       }
 
       return task;
+    }
+    return null;
+  }
+
+  static async deleteTask(teacherId, taskId, classId) {
+    // Check whether user is the class teacher or not.
+   const classInstance = await classModel.findOne({
+      where: {
+        id: classId,
+        teacher_id: teacherId,
+      },
+    });
+    if (classInstance == null) {
+      return null;
+    }
+
+    const taskInstance = await taskModel.findOne({
+      where: {
+        id: taskId,
+        class_id: classId,
+      },
+    });
+    if (taskInstance) {
+      await taskInstance.destroy();
+      return 1
     }
     return null;
   }
