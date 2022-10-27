@@ -58,6 +58,20 @@ class UserController {
       next(error);
     }
   }
+
+  static async getCurrentUserData(req, res, next) {
+    const userId = req.query.user_id;
+    try {
+      const userData = await modelHelper.getUserData(userId);
+      const response = Response.getResponse(
+        "The system successfully got the user data.",
+        userData
+      );
+      return res.status(200).json(response);
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 module.exports = UserController;

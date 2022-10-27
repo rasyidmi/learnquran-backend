@@ -5,6 +5,7 @@ const userController = require("../controllers/user-controller");
 
 router.post("/register", userController.registerUser);
 if (process.env.ENV) router.use(userAuthorization);
+router.get("/", userController.getCurrentUserData);
 router.delete("/delete", userController.deleteUser);
 
 module.exports = router;
