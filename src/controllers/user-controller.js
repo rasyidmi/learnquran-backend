@@ -40,7 +40,7 @@ class UserController {
   }
 
   static async deleteUser(req, res, next) {
-    const userId = req.body.user_id;
+    const userId = req.query.user_id;
 
     try {
       const deletedUserId = await modelHelper.deleteUser(userId);

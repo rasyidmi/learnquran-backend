@@ -5,11 +5,9 @@ const Response = require("../dto/response");
 class ClassController {
   static async createClass(req, res, next) {
     const body = req.body;
+    const params = req.query;
     try {
-      const createdClass = await modelHelper.createClass(
-        { name: body.name, capacity: body.capacity },
-        body.user_id
-      );
+      const createdClass = await modelHelper.createClass(body, params.user_id);
       if (createdClass == null) {
         return res.status(404).json({ message: "User is not a teacher" });
       }
@@ -76,30 +74,23 @@ class ClassController {
 
   static async updateClass(req, res, next) {
     const body = req.body;
+    const params = req.query;
     try {
-      // Check if the current user is teacher or not.
-      const teacher = await teacherModel.findOne({
-        where: {
-          id: body.user_id,
-        },
-      });
-      if (teacher == null) {
-        return res.status(404).json({ message: "User is not a teacher" });
-      }
-
-      const updatedClass = await modelHelper.updateClass(
-        {
-          name: body.name,
-          capacity: body.capacity,
-        },
-        req.params.id
+      const helperResponse = await modelHelper.updateClass(
+        body,
+        req.params.id,
+        params.user_id
       );
-      if (updatedClass != null) {
-        const response = Response.putResponse(
-          "The system successfully updated a class."
-        );
-        return res.status(200).json(response);
-      }
+
+      if (helperResponse == null)
+        return res
+          .status(200)
+          .json({ message: "The user is not the teacher in that class." });
+
+      const response = Response.putResponse(
+        "The system successfully updated a class."
+      );
+      return res.status(200).json(response);
     } catch (error) {
       next(error);
     }
@@ -107,8 +98,9 @@ class ClassController {
 
   static async deleteClass(req, res, next) {
     const classId = req.params.id;
+    const teacherId = req.query.user_id;
     try {
-      const value = await modelHelper.deleteClass(classId);
+      const value = await modelHelper.deleteClass(classId, teacherId);
       if (value != null) {
         const response = Response.deleteResponse(
           "The system successfully deleted a class."

@@ -1,18 +1,23 @@
 const dbConfig = require("../config/db-config.js");
 
 const Sequelize = require("sequelize");
-const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
-  host: dbConfig.HOST,
-  dialect: dbConfig.dialect,
-  operatorsAliases: false,
+const sequelize = new Sequelize(
+  dbConfig.database,
+  dbConfig.username,
+  dbConfig.password,
+  {
+    host: dbConfig.host,
+    dialect: dbConfig.dialect,
+    operatorsAliases: false,
 
-  pool: {
-    max: dbConfig.pool.max,
-    min: dbConfig.pool.min,
-    acquire: dbConfig.pool.acquire,
-    idle: dbConfig.pool.idle,
-  },
-});
+    pool: {
+      max: dbConfig.pool.max,
+      min: dbConfig.pool.min,
+      acquire: dbConfig.pool.acquire,
+      idle: dbConfig.pool.idle,
+    },
+  }
+);
 
 const db = {};
 
@@ -72,8 +77,7 @@ db.submission.belongsTo(db.teacher, { foreignKey: "teacher_id" });
 db.classes.hasMany(db.submission, {
   foreignKey: "class_id",
   onDelete: "CASCADE",
-})
+});
 db.submission.belongsTo(db.classes, { foreignKey: "class_id" });
-
 
 module.exports = db;

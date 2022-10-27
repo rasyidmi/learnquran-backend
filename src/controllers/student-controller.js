@@ -3,8 +3,7 @@ const Response = require("../dto/response");
 
 class StudentController {
   static async enrollClass(req, res, next) {
-    const body = req.body;
-    const userId = body.user_id;
+    const userId = req.query.user_id;
     const classId = req.params.id;
 
     try {
@@ -28,8 +27,7 @@ class StudentController {
   }
 
   static async unenrollClass(req, res, next) {
-    const body = req.body;
-    const userId = body.user_id;
+    const userId = req.query.user_id;
     const classId = req.params.id;
 
     try {
