@@ -2,10 +2,12 @@ const firebaseAdmin = require("firebase-admin");
 
 class FirebaseAdmin {
   static async createFirebaseUser(email, password) {
-    return await firebaseAdmin.auth().createUser({
+    const firebaseUser = await firebaseAdmin.auth().createUser({
       email: email,
       password: password,
     });
+
+    return firebaseUser
   }
 
   static async deleteFirebaseUser(uid) {
