@@ -1,5 +1,5 @@
 const firebaseHelper = require("../helpers/firebase-helper/fireabase-admin");
-const modelHelper = require("../models/user-model");
+const userModel = require("../models/user-model");
 const Response = require("../dto/response");
 
 class UserController {
@@ -24,9 +24,9 @@ class UserController {
     };
     try {
       if (req.query.condition == 0) {
-        await modelHelper.createStudent(newUser);
+        await userModel.createStudent(newUser);
       } else {
-        await modelHelper.createTeacher(newUser);
+        await userModel.createTeacher(newUser);
       }
       const response = Response.postResponse(
         "The system successfully created a new user.",
@@ -43,7 +43,7 @@ class UserController {
     const userId = req.query.user_id;
 
     try {
-      const deletedUserId = await modelHelper.deleteUser(userId);
+      const deletedUserId = await userModel.deleteUser(userId);
       if (deletedUserId == null) {
         return res.status(404).json({ message: "User not found." });
       }
@@ -62,7 +62,7 @@ class UserController {
   static async getCurrentUserData(req, res, next) {
     const userId = req.query.user_id;
     try {
-      const userData = await modelHelper.getUserData(userId);
+      const userData = await userModel.getUserData(userId);
       const response = Response.getResponse(
         "The system successfully got the user data.",
         userData

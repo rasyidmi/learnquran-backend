@@ -1,4 +1,4 @@
-const modelHelper = require("../models/task-model");
+const taskModel = require("../models/task-model");
 const Response = require("../dto/response");
 
 class TaskController {
@@ -7,7 +7,7 @@ class TaskController {
     const teacherId = body.user_id;
     const classId = body.class_id;
     try {
-      const createdTask = await modelHelper.createTask(
+      const createdTask = await taskModel.createTask(
         body,
         classId,
         teacherId
@@ -35,7 +35,7 @@ class TaskController {
     const classId = params.class_id;
 
     try {
-      const value = await modelHelper.deleteTask(teacherId, taskId, classId);
+      const value = await taskModel.deleteTask(teacherId, taskId, classId);
       if (value != null) {
         const response = Response.deleteResponse(
           "The system successfully deleted a task."
