@@ -1,4 +1,4 @@
-const modelHelper = require("../helpers/model-helper/task-helper");
+const modelHelper = require("../models/task-model");
 const Response = require("../dto/response");
 
 class TaskController {

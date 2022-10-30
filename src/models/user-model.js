@@ -1,7 +1,7 @@
-const teacherModel = require("../../models/index").teacher;
-const studentModel = require("../../models/index").student;
+const teacherModel = require("../config/database/models").teacher;
+const studentModel = require("../config/database/models").student;
 
-class UserModelHelper {
+class UserModel {
   static async createStudent(data) {
     await studentModel.create(data);
   }
@@ -42,4 +42,4 @@ class UserModelHelper {
   }
 }
 
-module.exports = UserModelHelper;
+module.exports = UserModel;

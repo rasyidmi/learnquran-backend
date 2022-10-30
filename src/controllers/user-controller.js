@@ -1,5 +1,5 @@
 const firebaseHelper = require("../helpers/firebase-helper/fireabase-admin");
-const modelHelper = require("../helpers/model-helper/user-helper");
+const modelHelper = require("../models/user-model");
 const Response = require("../dto/response");
 
 class UserController {

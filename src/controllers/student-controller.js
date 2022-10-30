@@ -1,4 +1,4 @@
-const modelHelper = require("../helpers/model-helper/student-helper");
+const modelHelper = require("../models/student-model");
 const Response = require("../dto/response");
 
 class StudentController {
