@@ -4,7 +4,7 @@ const Response = require("../dto/response");
 class TaskController {
   static async createTask(req, res, next) {
     const body = req.body;
-    const teacherId = body.user_id;
+    const teacherId = req.query.user_id;
     const classId = body.class_id;
     try {
       const createdTask = await taskModel.createTask(

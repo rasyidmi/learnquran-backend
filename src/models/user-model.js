@@ -1,42 +1,48 @@
-const teacherModel = require("../config/database/models").teacher;
-const studentModel = require("../config/database/models").student;
+const userModel = require("../config/database/models").user;
 
 class UserModel {
-  static async createStudent(data) {
-    await studentModel.create(data);
+  static async createUser(data) {
+    return await userModel.create(data);
   }
 
-  static async createTeacher(data) {
-    await teacherModel.create(data);
-  }
-
-  static async deleteUser(id) {
-    const query = {
+  static async getUser(emailAddress) {
+    const user = await userModel.findOne({
       where: {
-        id: id,
+        email_address: emailAddress,
       },
-    };
-    const studentInstance = await studentModel.findOne(query);
-    const teacherInstance = await teacherModel.findOne(query);
-    if (studentInstance == null && teacherInstance == null) {
-      return null;
-    } else if (studentInstance != null) {
-      await studentInstance.destroy();
-    } else if (teacherInstance != null) {
-      await teacherInstance.destroy();
+    });
+
+    if (user) return user;
+    return null;
+  }
+  static async createStudent(userInstance, data) {
+    await userInstance.createStudent(data);
+  }
+
+  static async createTeacher(userInstance, data) {
+    await userInstance.createTeacher(data);
+  }
+
+  static async deleteUser(emailAddress) {
+    const userInstance = await userModel.findOne({
+      where: {
+        email_address: emailAddress,
+      },
+    });
+    if (userInstance) {
+      await userInstance.destroy();
+      return emailAddress;
     }
-    return id;
+    return null;
   }
 
-  static async getUserData(id) {
-    const query = {
-      where: {
-        id: id,
-      },
-    };
+  static async getUserData(emailAddress) {
+    const userInstance = await userModel.findOne({
+      where: { email_address: emailAddress },
+    });
 
-    const studentInstance = await studentModel.findOne(query);
-    const teacherInstance = await teacherModel.findOne(query);
+    const studentInstance = await userInstance.getStudent();
+    const teacherInstance = await userInstance.getTeacher();
     if (studentInstance) return studentInstance;
     return teacherInstance;
   }

@@ -4,7 +4,8 @@ const router = express.Router();
 const userController = require("../controllers/user-controller");
 
 router.post("/register", userController.registerUser);
-if (process.env.ENV) router.use(userAuthorization);
+router.post("/login", userController.login);
+router.use(userAuthorization);
 router.get("/", userController.getCurrentUserData);
 router.delete("/delete", userController.deleteUser);
 

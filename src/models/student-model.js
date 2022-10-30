@@ -4,10 +4,10 @@ const teacherModel = require("../config/database/models").teacher;
 const submissionModel = require("../config/database/models").submission;
 
 class StudentModel {
-  static async enrollClass(studentId, classId) {
+  static async enrollClass(userId, classId) {
     const student = await studentModel.findOne({
       where: {
-        id: studentId,
+        id: userId,
       },
     });
     const classInstance = await classModel.findOne({
@@ -31,7 +31,7 @@ class StudentModel {
       // Assign the user to the desired class.
       await student.addClass(classInstance);
       return {
-        student_id: studentId,
+        student_id: userId,
         clsas_id: classId,
       };
     } else {
@@ -39,10 +39,10 @@ class StudentModel {
     }
   }
 
-  static async unenrollClass(studentId, classId) {
+  static async unenrollClass(userId, classId) {
     const student = await studentModel.findOne({
       where: {
-        id: studentId,
+        id: userId,
       },
     });
     const classInstance = await classModel.findOne({
@@ -58,13 +58,13 @@ class StudentModel {
       // Delete all related submissions.
       await submissionModel.destroy({
         where: {
-          student_id: studentId,
+          student_id: userId,
           class_id: classInstance.dataValues.id,
         },
       });
 
       return {
-        student_id: studentId,
+        student_id: userId,
         clsas_id: classId,
       };
     } else {

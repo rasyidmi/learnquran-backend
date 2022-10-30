@@ -34,13 +34,13 @@ db.task = require("./task-model.js")(sequelize, Sequelize);
 db.teacher = require("./teacher-model.js")(sequelize, Sequelize);
 
 // Define the associations
-db.user.hasMany(db.teacher, {
+db.user.hasOne(db.teacher, {
   foreignKey: "email_address",
   onDelete: "CASCADE",
 });
 db.teacher.belongsTo(db.user, { foreignKey: "email_address" });
 
-db.user.hasMany(db.student, {
+db.user.hasOne(db.student, {
   foreignKey: "email_address",
   onDelete: "CASCADE",
 });
