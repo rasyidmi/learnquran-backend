@@ -3,17 +3,12 @@ module.exports = (sequelize, DataTypes) => {
     "student",
     {
       id: {
-        type: DataTypes.STRING,
+        type: DataTypes.UUID,
         primaryKey: true,
+        default: sequelize.fn('uuid_generate_v4')
       },
       name: {
         type: DataTypes.STRING,
-        allowNull: false,
-      },
-      email_address: {
-        type: DataTypes.STRING,
-        isEmail: true,
-        unique: true,
         allowNull: false,
       },
       phone_number: {

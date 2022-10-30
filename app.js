@@ -3,7 +3,7 @@ if (process.env.ENV == null) {
 }
 const express = require("express");
 const app = express();
-const cors = require('cors')
+const cors = require("cors");
 const routes = require("./src/routes");
 const db = require("./src/config/database/models");
 const authorizationMiddleware = require("./src/middlewares/authorization");
@@ -18,7 +18,7 @@ firebaseAdmin.initializeApp({
 
 // Connecting to database
 db.sequelize
-  .sync()
+  .sync({ force: true })
   .then(() => {
     console.log("Success sync to the database.");
   })

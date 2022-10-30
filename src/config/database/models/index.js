@@ -25,6 +25,7 @@ db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
 // Assign the model to db variable
+db.user = require("./user-model.js")(sequelize, Sequelize);
 db.certificate = require("./certificate-model.js")(sequelize, Sequelize);
 db.classes = require("./class-model.js")(sequelize, Sequelize);
 db.student = require("./student-model.js")(sequelize, Sequelize);
@@ -33,6 +34,18 @@ db.task = require("./task-model.js")(sequelize, Sequelize);
 db.teacher = require("./teacher-model.js")(sequelize, Sequelize);
 
 // Define the associations
+db.user.hasMany(db.teacher, {
+  foreignKey: "email_address",
+  onDelete: "CASCADE",
+});
+db.teacher.belongsTo(db.user, { foreignKey: "email_address" });
+
+db.user.hasMany(db.student, {
+  foreignKey: "email_address",
+  onDelete: "CASCADE",
+});
+db.student.belongsTo(db.user, { foreignKey: "email_address" });
+
 db.teacher.hasMany(db.classes, {
   foreignKey: "teacher_id",
   onDelete: "CASCADE",
