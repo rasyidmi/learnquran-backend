@@ -3,7 +3,7 @@ const userAuthorization = require("../middlewares/user-authorization");
 const classController = require("../controllers/class-controller");
 const router = express.Router();
 
-if (process.env.ENV) router.use(userAuthorization);
+router.use(userAuthorization);
 router.get("/", classController.getAllClass);
 router.get("/search", classController.searchClasses);
 router.get("/:id", classController.getClassDetail);

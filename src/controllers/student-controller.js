@@ -1,4 +1,4 @@
-const modelHelper = require("../helpers/model-helper/student-helper");
+const studentModel = require("../models/student-model");
 const Response = require("../dto/response");
 
 class StudentController {
@@ -7,7 +7,7 @@ class StudentController {
     const classId = req.params.id;
 
     try {
-      const fetchedData = await modelHelper.enrollClass(userId, classId);
+      const fetchedData = await studentModel.enrollClass(userId, classId);
 
       if (fetchedData != null) {
         const response = Response.putResponse(
@@ -31,7 +31,7 @@ class StudentController {
     const classId = req.params.id;
 
     try {
-      const fetchedData = await modelHelper.unenrollClass(userId, classId);
+      const fetchedData = await studentModel.unenrollClass(userId, classId);
 
       if (fetchedData != null) {
         const response = Response.putResponse(
