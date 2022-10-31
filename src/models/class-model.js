@@ -1,6 +1,7 @@
 const sequelize = require("sequelize");
 const classModel = require("../config/database/models").classes;
 const teacherModel = require("../config/database/models").teacher;
+const studentModel = require("../config/database/models").student;
 
 class ClassModel {
   static async createClass(data, teacherId) {
@@ -17,6 +18,29 @@ class ClassModel {
     const createdClass = await teacher.createClass(data);
     return createdClass;
   }
+
+  static async getClassByTeacher(teacherId) {
+    const classes = await classModel.findAll({
+      where: {
+        teacher_id: teacherId,
+      },
+    });
+
+    return classes;
+  }
+
+  static async getClassByStudent(studentId) {
+    const student = await studentModel.findOne({
+      where: {
+        id: studentId,
+      },
+    });
+
+    const classes = await student.getClasses();
+
+    return classes;
+  }
+
   static async getAllClasses(body) {
     const listClass = [];
     const query = {

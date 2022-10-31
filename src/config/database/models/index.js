@@ -1,20 +1,41 @@
 const dbConfig = require("../db-config");
 
 const Sequelize = require("sequelize");
-const sequelize = new Sequelize(dbConfig.url, {
-  dialectOptions: {
-    ssl: {
-      require: true,
-      rejectUnauthorized: false,
+var sequelize;
+if (process.env.ENV == null) {
+  sequelize = new Sequelize(
+    dbConfig.database,
+    dbConfig.username,
+    dbConfig.password,
+    {
+      host: dbConfig.host,
+      dialect: dbConfig.dialect,
+      operatorsAliases: false,
+
+      pool: {
+        max: dbConfig.pool.max,
+        min: dbConfig.pool.min,
+        acquire: dbConfig.pool.acquire,
+        idle: dbConfig.pool.idle,
+      },
+    }
+  );
+} else {
+  sequelize = new Sequelize(dbConfig.url, {
+    dialectOptions: {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false,
+      },
     },
-  },
-  pool: {
-    max: dbConfig.pool.max,
-    min: dbConfig.pool.min,
-    acquire: dbConfig.pool.acquire,
-    idle: dbConfig.pool.idle,
-  },
-});
+    pool: {
+      max: dbConfig.pool.max,
+      min: dbConfig.pool.min,
+      acquire: dbConfig.pool.acquire,
+      idle: dbConfig.pool.idle,
+    },
+  });
+}
 
 const db = {};
 
