@@ -35,6 +35,36 @@ class ClassController {
     }
   }
 
+  static async getClassByStudent(req, res, next) {
+    const studentId = req.query.user_id;
+    try {
+      const classes = await classModel.getClassByStudent(studentId);
+
+      const response = Response.getResponse(
+        "The system successfully got all class data.",
+        classes
+      );
+      return res.status(200).json(response);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async getClassByTeacher(req, res, next) {
+    const teacherId = req.query.user_id;
+    try {
+      const classes = await classModel.getClassByTeacher(teacherId);
+
+      const response = Response.getResponse(
+        "The system successfully got all class data.",
+        classes
+      );
+      return res.status(200).json(response);
+    } catch (error) {
+      next(error);
+    }
+  }
+
   static async searchClasses(req, res, next) {
     const keyword = req.query.keyword;
     try {
