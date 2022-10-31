@@ -1,4 +1,5 @@
 const studentModel = require("../models/student-model");
+const submissionModel = require("../models/submission-model");
 const Response = require("../dto/response");
 
 class StudentController {
@@ -43,6 +44,21 @@ class StudentController {
       return res
         .status(400)
         .json({ message: "The user is not enrolled in the class." });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async uploadAudio(req, res, next) {
+    const audioFileName = req.file;
+    const submissionId = req.params.id;
+
+    try {
+      await submissionModel.uploadAudio(submissionId, audioFileName);
+      const response = Response.postResponse(
+        "The system successfully uploaded the audio to the submission."
+      );
+      return res.status(200).json(response);
     } catch (error) {
       next(error);
     }

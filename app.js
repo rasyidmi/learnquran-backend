@@ -14,11 +14,12 @@ const firebaseAdmin = require("firebase-admin");
 // Initialize firebase admin
 firebaseAdmin.initializeApp({
   credential: firebaseAdmin.credential.cert(firebaseCredential),
+  storageBucket: process.env.FB_STORAGE_URL,
 });
 
 // Connecting to database
 db.sequelize
-  .sync({ force: true })
+  .sync()
   .then(() => {
     console.log("Success sync to the database.");
   })
