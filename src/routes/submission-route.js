@@ -7,5 +7,6 @@ const upload = multer({ storage: multer.memoryStorage() });
 
 router.use(userAuthorization);
 router.post("/upload/:id", upload.single("file"), submissionController.uploadAudio);
+router.post("/score/:id", submissionController.giveScore);
 
 module.exports = router;

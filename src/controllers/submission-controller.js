@@ -25,6 +25,31 @@ class SubmissionController {
       next(error);
     }
   }
+
+  static async giveScore(req, res, next) {
+    const userId = req.query.user_id;
+    const submissionId = req.params.id;
+    const data = req.body;
+
+    try {
+      const modelResponse = await submissionModel.giveScore(
+        submissionId,
+        userId,
+        data
+      );
+      if (!modelResponse)
+        return res
+          .status(400)
+          .json({ message: "User is not the teacher in the class." });
+
+      const response = Response.postResponse(
+        "The system successfully updated the submission score."
+      );
+      return res.status(200).json(response);
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 module.exports = SubmissionController;

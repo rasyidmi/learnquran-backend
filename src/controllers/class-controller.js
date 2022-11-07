@@ -114,7 +114,7 @@ class ClassController {
 
       if (helperResponse == null)
         return res
-          .status(200)
+          .status(400)
           .json({ message: "The user is not the teacher in that class." });
 
       const response = Response.putResponse(
