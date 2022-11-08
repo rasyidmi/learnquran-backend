@@ -16,6 +16,17 @@ class UserModel {
     return null;
   }
 
+  static async updatePassword(emailAddress, newData) {
+    const user = await userModel.findOne({
+      where: {
+        email_address: emailAddress,
+      },
+    });
+    if (!user) return null;
+
+    return await user.update(newData);
+  }
+
   static async getUserRole(emailAddress) {
     const userInstance = await userModel.findOne({
       where: { email_address: emailAddress },

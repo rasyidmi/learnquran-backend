@@ -1,7 +1,10 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const userModel = require("../models/user-model");
+const studentModel = require("../models/student-model");
+const teacherModel = require("../models/teacher-model");
 const Response = require("../dto/response");
+const { student } = require("../config/database/models");
 
 class UserController {
   static async registerUser(req, res, next) {
@@ -34,11 +37,34 @@ class UserController {
     }
   }
 
-  static async editUser(req, res, next) {
+  static async updateUser(req, res, next) {
     const userId = req.query.user_id;
+    const emailAddress = req.query.email_address;
+    const role = req.query.role;
     const body = req.body;
 
-    if (body.email_address) {
+    if (body.password) {
+      const salt = await bcrypt.genSalt();
+      const hashedPassword = await bcrypt.hash(body.password, salt);
+      body.password = hashedPassword;
+    }
+    try {
+      // Update data in user table.
+      if (body.password) {
+        await userModel.updatePassword(emailAddress, body);
+      }
+      // Update data in student or teacher table.
+      if (role == 0) {
+        await studentModel.updateData(userId, body);
+      } else {
+        await teacherModel.updateData(userId, body);
+      }
+      const response = Response.putResponse(
+        "The system successfully updated the user data."
+      );
+      return res.status(200).json(response);
+    } catch (error) {
+      next(error);
     }
   }
 

@@ -4,6 +4,14 @@ const teacherModel = require("../config/database/models").teacher;
 const submissionModel = require("../config/database/models").submission;
 
 class StudentModel {
+  static async updateData(userId, newData) {
+    const user = await studentModel.findOne({
+      where: {
+        id: userId,
+      },
+    });
+    await user.update(newData);
+  }
   static async enrollClass(userId, classId) {
     const student = await studentModel.findOne({
       where: {
