@@ -15,6 +15,17 @@ class UserModel {
     if (user) return user;
     return null;
   }
+
+  static async getUserRole(emailAddress) {
+    const userInstance = await userModel.findOne({
+      where: { email_address: emailAddress },
+    });
+
+    const studentInstance = await userInstance.getStudent();
+    if (studentInstance) return 0;
+    return 1;
+  }
+
   static async createStudent(userInstance, data) {
     await userInstance.createStudent(data);
   }

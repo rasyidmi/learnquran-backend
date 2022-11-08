@@ -34,6 +34,14 @@ class UserController {
     }
   }
 
+  static async editUser(req, res, next) {
+    const userId = req.query.user_id;
+    const body = req.body;
+
+    if (body.email_address) {
+    }
+  }
+
   static async deleteUser(req, res, next) {
     const userEmail = req.query.email_address;
 
@@ -65,10 +73,12 @@ class UserController {
       );
       if (!match)
         return res.status(400).json({ message: "Password is incorrect." });
-      const studentTeacher = await userModel.getUserData(body.email_address);
+      const userData = await userModel.getUserData(body.email_address);
+      const role = await userModel.getUserRole(body.email_address);
       const payload = {
-        userId: studentTeacher.dataValues.id,
+        userId: userData.dataValues.id,
         emailAddress: body.email_address,
+        role: role,
       };
       const encodedJwt = jwt.sign(payload, process.env.JWT_SECRET, {
         expiresIn: "1d",
