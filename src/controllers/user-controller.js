@@ -73,14 +73,11 @@ class UserController {
 
     try {
       const deletedUserEmail = await userModel.deleteUser(userEmail);
-      if (deletedUserEmail) {
-        const response = Response.deleteResponse(
-          "The system successfully deleted a user.",
-          { email_address: deletedUserEmail }
-        );
-        return res.status(200).json(response);
-      }
-      return res.status(404).json({ message: "User not found." });
+      const response = Response.deleteResponse(
+        "The system successfully deleted a user.",
+        { email_address: deletedUserEmail }
+      );
+      return res.status(200).json(response);
     } catch (error) {
       next(error);
     }
@@ -91,7 +88,6 @@ class UserController {
 
     try {
       const user = await userModel.getUser(body.email_address);
-      if (!user) return res.status(404).json({ message: "User not found." });
       // Compare the password.
       const match = await bcrypt.compare(
         body.password,

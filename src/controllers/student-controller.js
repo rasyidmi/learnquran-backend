@@ -8,19 +8,11 @@ class StudentController {
 
     try {
       const fetchedData = await studentModel.enrollClass(userId, classId);
-
-      if (fetchedData != null) {
-        const response = Response.putResponse(
-          "The system successfully enrolled the user in the desired class.",
-          fetchedData
-        );
-        return res.status(200).json(response);
-      } else {
-        return res.status(400).json({
-          message:
-            "Class is overloaded, or user gender is prohibited in the class.",
-        });
-      }
+      const response = Response.putResponse(
+        "The system successfully enrolled the user in the desired class.",
+        fetchedData
+      );
+      return res.status(200).json(response);
     } catch (error) {
       next(error);
     }
@@ -32,17 +24,11 @@ class StudentController {
 
     try {
       const fetchedData = await studentModel.unenrollClass(userId, classId);
-
-      if (fetchedData != null) {
-        const response = Response.putResponse(
-          "The system successfully unenrolled the user from the desired class.",
-          fetchedData
-        );
-        return res.status(200).json(response);
-      }
-      return res
-        .status(400)
-        .json({ message: "The user is not enrolled in the class." });
+      const response = Response.putResponse(
+        "The system successfully unenrolled the user from the desired class.",
+        fetchedData
+      );
+      return res.status(200).json(response);
     } catch (error) {
       next(error);
     }

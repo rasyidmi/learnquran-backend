@@ -9,12 +9,10 @@ class SubmissionController {
 
     try {
       const submissionInstance = await submissionModel.get(submissionId);
-      if (submissionInstance.dataValues.audio_file != null) {
-        // Delete current audio file
-        await firebaseStorage.deleteFile(
-          submissionInstance.dataValues.audio_file
-        );
-      }
+      // Delete current audio file
+      await firebaseStorage.deleteFile(
+        submissionInstance.dataValues.audio_file
+      );
       const audioFileName = firebaseStorage.uploadFile(audioFile);
       await submissionModel.uploadAudio(submissionId, audioFileName);
       const response = Response.postResponse(
@@ -32,16 +30,7 @@ class SubmissionController {
     const data = req.body;
 
     try {
-      const modelResponse = await submissionModel.giveScore(
-        submissionId,
-        userId,
-        data
-      );
-      if (!modelResponse)
-        return res
-          .status(400)
-          .json({ message: "User is not the teacher in the class." });
-
+      await submissionModel.giveScore(submissionId, userId, data);
       const response = Response.postResponse(
         "The system successfully updated the submission score."
       );

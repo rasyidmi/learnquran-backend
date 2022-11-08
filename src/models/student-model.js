@@ -1,3 +1,4 @@
+const { ApplicationError } = require("../helpers/error-template");
 const studentModel = require("../config/database/models").student;
 const classModel = require("../config/database/models").classes;
 const teacherModel = require("../config/database/models").teacher;
@@ -43,7 +44,10 @@ class StudentModel {
         clsas_id: classId,
       };
     } else {
-      return null;
+      throw new ApplicationError(
+        "Class is overloaded, or user gender is prohibited in the class.",
+        400
+      );
     }
   }
 
@@ -76,7 +80,10 @@ class StudentModel {
         clsas_id: classId,
       };
     } else {
-      return null;
+      throw new ApplicationError(
+        "The system failed to unenroll student from the class.",
+        400
+      );
     }
   }
 }

@@ -10,9 +10,6 @@ class ClassController {
     const params = req.query;
     try {
       const createdClass = await classModel.createClass(body, params.user_id);
-      if (createdClass == null) {
-        return res.status(404).json({ message: "User is not a teacher" });
-      }
       const response = Response.postResponse(
         "The system successfully created a class.",
         createdClass
@@ -26,7 +23,6 @@ class ClassController {
   static async getAllClass(req, res, next) {
     try {
       const allClasses = await classModel.getAllClasses({ condition: 0 });
-
       const response = Response.getResponse(
         "The system successfully got all class data.",
         allClasses
@@ -41,7 +37,6 @@ class ClassController {
     const studentId = req.query.user_id;
     try {
       const classes = await classModel.getClassByStudent(studentId);
-
       const response = Response.getResponse(
         "The system successfully got all class data.",
         classes
@@ -56,7 +51,6 @@ class ClassController {
     const teacherId = req.query.user_id;
     try {
       const classes = await classModel.getClassByTeacher(teacherId);
-
       const response = Response.getResponse(
         "The system successfully got all class data.",
         classes
@@ -93,18 +87,13 @@ class ClassController {
         fetchedClass.dataValues.teacher_id
       );
       const classTasks = await taskModel.getTasksByClass(classId);
-
       fetchedClass.dataValues.teacher_name = classTeacher.dataValues.name;
       fetchedClass.dataValues.tasks = classTasks;
-      if (fetchedClass != null) {
-        const response = Response.getResponse(
-          "The system successfully got the class data.",
-          fetchedClass
-        );
-        return res.status(200).json(response);
-      } else {
-        return res.status(404).json({ message: "Class not found." });
-      }
+      const response = Response.getResponse(
+        "The system successfully got the class data.",
+        fetchedClass
+      );
+      return res.status(200).json(response);
     } catch (error) {
       next(error);
     }
@@ -114,17 +103,7 @@ class ClassController {
     const body = req.body;
     const params = req.query;
     try {
-      const helperResponse = await classModel.updateClass(
-        body,
-        req.params.id,
-        params.user_id
-      );
-
-      if (helperResponse == null)
-        return res
-          .status(400)
-          .json({ message: "The user is not the teacher in that class." });
-
+      await classModel.updateClass(body, req.params.id, params.user_id);
       const response = Response.putResponse(
         "The system successfully updated a class."
       );
@@ -138,15 +117,11 @@ class ClassController {
     const classId = req.params.id;
     const teacherId = req.query.user_id;
     try {
-      const value = await classModel.deleteClass(classId, teacherId);
-      if (value != null) {
-        const response = Response.deleteResponse(
-          "The system successfully deleted a class."
-        );
-        return res.status(200).json(response);
-      } else {
-        return res.status(404).json({ message: "Class is not found." });
-      }
+      await classModel.deleteClass(classId, teacherId);
+      const response = Response.deleteResponse(
+        "The system successfully deleted a class."
+      );
+      return res.status(200).json(response);
     } catch (error) {
       next(error);
     }

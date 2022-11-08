@@ -1,3 +1,4 @@
+const { ApplicationError } = require("../helpers/error-template");
 const userModel = require("../config/database/models").user;
 
 class UserModel {
@@ -13,7 +14,7 @@ class UserModel {
     });
 
     if (user) return user;
-    return null;
+    throw new ApplicationError("User not found.", 404);
   }
 
   static async updatePassword(emailAddress, newData) {
@@ -22,7 +23,7 @@ class UserModel {
         email_address: emailAddress,
       },
     });
-    if (!user) return null;
+    if (!user) throw new ApplicationError("User not found.", 404);
 
     return await user.update(newData);
   }
@@ -55,7 +56,7 @@ class UserModel {
       await userInstance.destroy();
       return emailAddress;
     }
-    return null;
+    throw new ApplicationError("User not found.", 404);
   }
 
   static async getUserData(emailAddress) {
