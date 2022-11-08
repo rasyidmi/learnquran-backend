@@ -1,6 +1,4 @@
 const studentModel = require("../models/student-model");
-const submissionModel = require("../models/submission-model");
-const firebaseStorage = require("../helpers/firebase-storage");
 const Response = require("../dto/response");
 
 class StudentController {
@@ -10,19 +8,11 @@ class StudentController {
 
     try {
       const fetchedData = await studentModel.enrollClass(userId, classId);
-
-      if (fetchedData != null) {
-        const response = Response.putResponse(
-          "The system successfully enrolled the user in the desired class.",
-          fetchedData
-        );
-        return res.status(200).json(response);
-      } else {
-        return res.status(400).json({
-          message:
-            "Class is overloaded, or user gender is prohibited in the class.",
-        });
-      }
+      const response = Response.putResponse(
+        "The system successfully enrolled the user in the desired class.",
+        fetchedData
+      );
+      return res.status(200).json(response);
     } catch (error) {
       next(error);
     }
@@ -34,38 +24,9 @@ class StudentController {
 
     try {
       const fetchedData = await studentModel.unenrollClass(userId, classId);
-
-      if (fetchedData != null) {
-        const response = Response.putResponse(
-          "The system successfully unenrolled the user from the desired class.",
-          fetchedData
-        );
-        return res.status(200).json(response);
-      }
-      return res
-        .status(400)
-        .json({ message: "The user is not enrolled in the class." });
-    } catch (error) {
-      next(error);
-    }
-  }
-
-  static async uploadAudio(req, res, next) {
-    const audioFile = req.file;
-    const submissionId = req.params.id;
-
-    try {
-      const submissionInstance = await submissionModel.get(submissionId);
-      if (submissionInstance.dataValues.audio_file != null) {
-        // Delete current audio file
-        await firebaseStorage.deleteFile(
-          submissionInstance.dataValues.audio_file
-        );
-      }
-      const audioFileName = firebaseStorage.uploadFile(audioFile);
-      await submissionModel.uploadAudio(submissionId, audioFileName);
-      const response = Response.postResponse(
-        "The system successfully uploaded the audio to the submission."
+      const response = Response.putResponse(
+        "The system successfully unenrolled the user from the desired class.",
+        fetchedData
       );
       return res.status(200).json(response);
     } catch (error) {

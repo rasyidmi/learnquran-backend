@@ -3,7 +3,7 @@ module.exports = (sequelize, DataTypes) => {
     "submission",
     {
       score: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.DOUBLE,
       },
       feedback: {
         type: DataTypes.TEXT,

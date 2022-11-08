@@ -1,3 +1,4 @@
+const { ApplicationError } = require("../helpers/error-template");
 const submissionModel = require("../config/database/models").submission;
 const moment = require("moment");
 
@@ -6,7 +7,7 @@ class SubmissionModel {
     const submission = await submissionModel.findOne({
       where: { id: submissionId },
     });
-
+    if (!submission) throw new ApplicationError("Submission not found.", 404);
     return submission;
   }
 
@@ -22,6 +23,17 @@ class SubmissionModel {
       audio_file: audioFileName,
       updated_date: currentTime,
     });
+  }
+
+  static async giveScore(submissionId, userId, data) {
+    const submission = await submissionModel.findOne({
+      where: {
+        id: submissionId,
+        teacher_id: userId,
+      },
+    });
+    if (!submission) throw new ApplicationError("Submission not found.", 404);
+    return await submission.update(data);
   }
 }
 

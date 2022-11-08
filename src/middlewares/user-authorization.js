@@ -2,13 +2,14 @@ const jwt = require("jsonwebtoken");
 
 const userAuthorization = async (req, res, next) => {
   const authHeader = req.header("Authorization");
-  if (authHeader.startsWith("Bearer ")) {
+  if (authHeader != null && authHeader.startsWith("Bearer ")) {
     const token = authHeader.split(" ");
     const jwtToken = token[1];
     try {
       const payload = jwt.verify(jwtToken, process.env.JWT_SECRET);
       req.query.user_id = payload.userId;
       req.query.email_address = payload.emailAddress;
+      req.query.role = payload.role;
       next();
     } catch (error) {
       return res.status(401).json({ message: "Token is invalid." });

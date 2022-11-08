@@ -1,7 +1,10 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const userModel = require("../models/user-model");
+const studentModel = require("../models/student-model");
+const teacherModel = require("../models/teacher-model");
 const Response = require("../dto/response");
+const { student } = require("../config/database/models");
 
 class UserController {
   static async registerUser(req, res, next) {
@@ -34,19 +37,47 @@ class UserController {
     }
   }
 
+  static async updateUser(req, res, next) {
+    const userId = req.query.user_id;
+    const emailAddress = req.query.email_address;
+    const role = req.query.role;
+    const body = req.body;
+
+    if (body.password) {
+      const salt = await bcrypt.genSalt();
+      const hashedPassword = await bcrypt.hash(body.password, salt);
+      body.password = hashedPassword;
+    }
+    try {
+      // Update data in user table.
+      if (body.password) {
+        await userModel.updatePassword(emailAddress, body);
+      }
+      // Update data in student or teacher table.
+      if (role == 0) {
+        await studentModel.updateData(userId, body);
+      } else {
+        await teacherModel.updateData(userId, body);
+      }
+      const response = Response.putResponse(
+        "The system successfully updated the user data."
+      );
+      return res.status(200).json(response);
+    } catch (error) {
+      next(error);
+    }
+  }
+
   static async deleteUser(req, res, next) {
     const userEmail = req.query.email_address;
 
     try {
       const deletedUserEmail = await userModel.deleteUser(userEmail);
-      if (deletedUserEmail) {
-        const response = Response.deleteResponse(
-          "The system successfully deleted a user.",
-          { email_address: deletedUserEmail }
-        );
-        return res.status(200).json(response);
-      }
-      return res.status(404).json({ message: "User not found." });
+      const response = Response.deleteResponse(
+        "The system successfully deleted a user.",
+        { email_address: deletedUserEmail }
+      );
+      return res.status(200).json(response);
     } catch (error) {
       next(error);
     }
@@ -57,7 +88,6 @@ class UserController {
 
     try {
       const user = await userModel.getUser(body.email_address);
-      if (!user) return res.status(404).json({ message: "User not found." });
       // Compare the password.
       const match = await bcrypt.compare(
         body.password,
@@ -65,10 +95,12 @@ class UserController {
       );
       if (!match)
         return res.status(400).json({ message: "Password is incorrect." });
-      const studentTeacher = await userModel.getUserData(body.email_address);
+      const userData = await userModel.getUserData(body.email_address);
+      const role = await userModel.getUserRole(body.email_address);
       const payload = {
-        userId: studentTeacher.dataValues.id,
+        userId: userData.dataValues.id,
         emailAddress: body.email_address,
+        role: role,
       };
       const encodedJwt = jwt.sign(payload, process.env.JWT_SECRET, {
         expiresIn: "1d",

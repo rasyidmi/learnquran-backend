@@ -11,6 +11,8 @@ const errorHandler = (err, req, res, next) => {
       return res.status(400).json({
         message: "User already existed.",
       });
+    case "ApplicationError":
+      return res.status(err.statusCode).json({ message: err.message });
     default:
       const message = "Internal server error.";
       return res.status(500).json({ message: message });

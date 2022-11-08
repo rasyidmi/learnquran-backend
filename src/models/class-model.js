@@ -1,4 +1,5 @@
 const sequelize = require("sequelize");
+const { ApplicationError } = require("../helpers/error-template");
 const classModel = require("../config/database/models").classes;
 const teacherModel = require("../config/database/models").teacher;
 const studentModel = require("../config/database/models").student;
@@ -11,9 +12,7 @@ class ClassModel {
       },
     });
     // Check if the current user is teacher or not.
-    if (teacher == null) {
-      return null;
-    }
+    if (!teacher) throw new ApplicationError("User is not a teacher.", 400);
 
     const createdClass = await teacher.createClass(data);
     return createdClass;
@@ -74,11 +73,12 @@ class ClassModel {
   }
 
   static async getClassDetail(id) {
-    return await classModel.findOne({
+    const classInstance = await classModel.findOne({
       where: {
         id: id,
       },
     });
+    if (!classInstance) throw new ApplicationError("Class not found.", 404);
   }
 
   static async updateClass(data, id, teacherId) {
@@ -90,7 +90,10 @@ class ClassModel {
     });
     // Check if the current user is teacher or not.
     if (classInstance) return await classInstance.update(data);
-    return null;
+    throw new ApplicationError(
+      "The user is not the teacher in that class.",
+      400
+    );
   }
 
   static async deleteClass(id, teacherId) {
@@ -101,12 +104,8 @@ class ClassModel {
       },
     });
 
-    if (classInstance != null) {
-      await classInstance.destroy();
-      return 1; // Return 1 if success.
-    } else {
-      return null;
-    }
+    if (classInstance) return await classInstance.destroy();
+    throw new ApplicationError("Class is not found", 404);
   }
 }
 

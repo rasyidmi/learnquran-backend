@@ -1,3 +1,4 @@
+const { ApplicationError } = require("../helpers/error-template");
 const classModel = require("../config/database/models").classes;
 const taskModel = require("../config/database/models").task;
 
@@ -26,20 +27,26 @@ class TaskModel {
 
       return task;
     }
-    return null;
+    throw new ApplicationError("User is not the teacher of the class.", 404);
+  }
+
+  static async getTasksByClass(classId) {
+    return await taskModel.findAll({
+      where: { class_id: classId },
+      attributes: ["id", "name", "description"],
+    });
   }
 
   static async deleteTask(teacherId, taskId, classId) {
     // Check whether user is the class teacher or not.
-   const classInstance = await classModel.findOne({
+    const classInstance = await classModel.findOne({
       where: {
         id: classId,
         teacher_id: teacherId,
       },
     });
-    if (classInstance == null) {
-      return null;
-    }
+    if (!classInstance)
+      throw new ApplicationError("User is not the teacher of the class.", 400);
 
     const taskInstance = await taskModel.findOne({
       where: {
@@ -47,11 +54,8 @@ class TaskModel {
         class_id: classId,
       },
     });
-    if (taskInstance) {
-      await taskInstance.destroy();
-      return 1
-    }
-    return null;
+    if (taskInstance) await taskInstance.destroy();
+    throw new ApplicationError("Task is not found.", 404);
   }
 }
 
