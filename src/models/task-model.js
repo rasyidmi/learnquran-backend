@@ -29,9 +29,16 @@ class TaskModel {
     return null;
   }
 
+  static async getTasksByClass(classId) {
+    return await taskModel.findAll({
+      where: { class_id: classId },
+      attributes: ["id", "name", "description"],
+    });
+  }
+
   static async deleteTask(teacherId, taskId, classId) {
     // Check whether user is the class teacher or not.
-   const classInstance = await classModel.findOne({
+    const classInstance = await classModel.findOne({
       where: {
         id: classId,
         teacher_id: teacherId,
@@ -49,7 +56,7 @@ class TaskModel {
     });
     if (taskInstance) {
       await taskInstance.destroy();
-      return 1
+      return 1;
     }
     return null;
   }

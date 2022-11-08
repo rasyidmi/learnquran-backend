@@ -1,4 +1,6 @@
 const classModel = require("../models/class-model");
+const teacherModel = require("../models/teacher-model");
+const taskModel = require("../models/task-model");
 
 const Response = require("../dto/response");
 
@@ -87,7 +89,13 @@ class ClassController {
     const classId = req.params.id;
     try {
       const fetchedClass = await classModel.getClassDetail(classId);
+      const classTeacher = await teacherModel.getTeacher(
+        fetchedClass.dataValues.teacher_id
+      );
+      const classTasks = await taskModel.getTasksByClass(classId);
 
+      fetchedClass.dataValues.teacher_name = classTeacher.dataValues.name;
+      fetchedClass.dataValues.tasks = classTasks;
       if (fetchedClass != null) {
         const response = Response.getResponse(
           "The system successfully got the class data.",
