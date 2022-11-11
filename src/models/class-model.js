@@ -79,6 +79,7 @@ class ClassModel {
       },
     });
     if (!classInstance) throw new ApplicationError("Class not found.", 404);
+    return classInstance;
   }
 
   static async updateClass(data, id, teacherId) {
