@@ -103,7 +103,7 @@ class UserController {
         role: role,
       };
       const encodedJwt = jwt.sign(payload, process.env.JWT_SECRET, {
-        expiresIn: "1d",
+        expiresIn: "30d",
       });
       const response = Response.postResponse(
         "The system successfully logged in a user.",
