@@ -83,12 +83,13 @@ class ClassController {
     const classId = req.params.id;
     try {
       const fetchedClass = await classModel.getClassDetail(classId);
-      const classTeacher = await teacherModel.getTeacher(
-        fetchedClass.dataValues.teacher_id
-      );
+      // Add total students in the class.
+      const totalStudents = fetchedClass.students.length;
+      fetchedClass.dataValues.total_students = totalStudents;
+      // Add class tasks.
       const classTasks = await taskModel.getTasksByClass(classId);
-      fetchedClass.dataValues.teacher_name = classTeacher.dataValues.name;
       fetchedClass.dataValues.tasks = classTasks;
+
       const response = Response.getResponse(
         "The system successfully got the class data.",
         fetchedClass
