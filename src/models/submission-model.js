@@ -3,9 +3,20 @@ const submissionModel = require("../config/database/models").submission;
 const moment = require("moment");
 
 class SubmissionModel {
-  static async get(submissionId) {
+  static async getById(submissionId) {
     const submission = await submissionModel.findOne({
       where: { id: submissionId },
+    });
+    if (!submission) throw new ApplicationError("Submission not found.", 404);
+    return submission;
+  }
+
+  static async getByTaskAndStudent(taskId, studentId) {
+    const submission = await submissionModel.findOne({
+      where: {
+        task_id: taskId,
+        student_id: studentId,
+      },
     });
     if (!submission) throw new ApplicationError("Submission not found.", 404);
     return submission;
@@ -32,7 +43,11 @@ class SubmissionModel {
         teacher_id: userId,
       },
     });
-    if (!submission) throw new ApplicationError("Submission not found or user is not the teacher.", 404);
+    if (!submission)
+      throw new ApplicationError(
+        "Submission not found or user is not the teacher.",
+        404
+      );
     return await submission.update(data);
   }
 }

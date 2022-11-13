@@ -79,7 +79,7 @@ class ClassController {
     }
   }
 
-  static async teacherGetClassDetail(req, res, next) {
+  static async getClassDetail(req, res, next) {
     const classId = req.params.id;
     try {
       const fetchedClass = await classModel.getClassDetail(classId);
@@ -89,7 +89,7 @@ class ClassController {
       // Add class tasks.
       const classTasks = await taskModel.getTasksByClass(classId);
       fetchedClass.dataValues.tasks = classTasks;
-      
+
       const response = Response.getResponse(
         "The system successfully got the class data.",
         fetchedClass
