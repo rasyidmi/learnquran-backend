@@ -33,6 +33,10 @@ class SubmissionController {
         params.task_id,
         params.student_id
       );
+      const url = await firebaseStorage.getSignedUrl(
+        submissionInstance.dataValues.audio_file
+      );
+      submissionInstance.dataValues.audio_file = url;
       const response = Response.getResponse(
         "The system successfully uploaded the audio to the submission.",
         submissionInstance
