@@ -11,14 +11,17 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         defaultValue: 1,
       },
+      teacher_name: {
+        type: DataTypes.STRING,
+      },
     },
     {
       timestamps: false,
       name: {
         singular: "class",
         plural: "classes",
-      }
-    },
+      },
+    }
   );
 
   return classes;

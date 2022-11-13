@@ -77,6 +77,11 @@ class ClassModel {
       where: {
         id: id,
       },
+      include: {
+        model: studentModel,
+        required: true,
+        attributes: ["name"],
+      },
     });
     if (!classInstance) throw new ApplicationError("Class not found.", 404);
     return classInstance;
