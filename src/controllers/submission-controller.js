@@ -9,10 +9,12 @@ class SubmissionController {
 
     try {
       const submissionInstance = await submissionModel.get(submissionId);
-      // Delete current audio file
-      await firebaseStorage.deleteFile(
-        submissionInstance.dataValues.audio_file
-      );
+      if (submissionInstance.dataValues.audio_file)
+        // Delete current audio file
+        await firebaseStorage.deleteFile(
+          submissionInstance.dataValues.audio_file
+        );
+
       const audioFileName = firebaseStorage.uploadFile(audioFile);
       await submissionModel.uploadAudio(submissionId, audioFileName);
       const response = Response.postResponse(
