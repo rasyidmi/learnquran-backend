@@ -32,7 +32,7 @@ class SubmissionModel {
         teacher_id: userId,
       },
     });
-    if (!submission) throw new ApplicationError("Submission not found.", 404);
+    if (!submission) throw new ApplicationError("Submission not found or user is not the teacher.", 404);
     return await submission.update(data);
   }
 }
