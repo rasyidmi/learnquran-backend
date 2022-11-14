@@ -1,8 +1,8 @@
 const { ApplicationError } = require("../helpers/error-template");
-const studentModel = require("../config/database/models").student;
-const classModel = require("../config/database/models").classes;
-const teacherModel = require("../config/database/models").teacher;
-const submissionModel = require("../config/database/models").submission;
+const studentModel = require("../config/database/models").Student;
+const classModel = require("../config/database/models").Classes;
+const teacherModel = require("../config/database/models").Teacher;
+const submissionModel = require("../config/database/models").Submission;
 
 class StudentModel {
   static async updateData(userId, newData) {
@@ -35,7 +35,7 @@ class StudentModel {
     const totalStudent = await classInstance.countStudents();
     if (
       totalStudent + 1 <= classInstance.dataValues.capacity &&
-      student.dataValues.gender == classInstance.teacher.dataValues.gender
+      student.dataValues.gender == classInstance.Teacher.dataValues.gender
     ) {
       // Assign the user to the desired class.
       await student.addClass(classInstance);

@@ -1,6 +1,6 @@
 const { ApplicationError } = require("../helpers/error-template");
-const classModel = require("../config/database/models").classes;
-const taskModel = require("../config/database/models").task;
+const classModel = require("../config/database/models").Classes;
+const taskModel = require("../config/database/models").Task;
 
 class TaskModel {
   static async createTask(data, classId, teacherId) {
@@ -54,7 +54,10 @@ class TaskModel {
         class_id: classId,
       },
     });
-    if (taskInstance) await taskInstance.destroy();
+    if (taskInstance) {
+      await taskInstance.destroy();
+      return;
+    }
     throw new ApplicationError("Task is not found.", 404);
   }
 }

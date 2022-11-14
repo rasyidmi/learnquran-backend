@@ -1,8 +1,8 @@
 const sequelize = require("sequelize");
 const { ApplicationError } = require("../helpers/error-template");
-const classModel = require("../config/database/models").classes;
-const teacherModel = require("../config/database/models").teacher;
-const studentModel = require("../config/database/models").student;
+const classModel = require("../config/database/models").Classes;
+const teacherModel = require("../config/database/models").Teacher;
+const studentModel = require("../config/database/models").Student;
 
 class ClassModel {
   static async createClass(data, teacherId) {
@@ -14,6 +14,7 @@ class ClassModel {
     // Check if the current user is teacher or not.
     if (!teacher) throw new ApplicationError("User is not a teacher.", 400);
 
+    data.teacher_name = teacher.dataValues.name;
     const createdClass = await teacher.createClass(data);
     return createdClass;
   }
@@ -41,6 +42,11 @@ class ClassModel {
   }
 
   static async getAllClasses(body) {
+    const studentInstance = await studentModel.findOne({
+      where: {
+        id: body.studentId,
+      },
+    });
     const listClass = [];
     const query = {
       include: {
@@ -59,14 +65,17 @@ class ClassModel {
     }
     const classInstance = await classModel.findAll(query);
     for (const kelas of classInstance) {
-      const totalStudent = await kelas.countStudents();
-      listClass.push({
-        id: kelas.dataValues.id,
-        name: kelas.dataValues.name,
-        capacity: kelas.dataValues.capacity,
-        total_student: totalStudent,
-        teacher_name: kelas.dataValues.teacher.name,
-      });
+      // Exclude student enrolled class in search.
+      if (!(await kelas.hasStudent(studentInstance))) {
+        const totalStudent = await kelas.countStudents();
+        listClass.push({
+          id: kelas.dataValues.id,
+          name: kelas.dataValues.name,
+          capacity: kelas.dataValues.capacity,
+          total_student: totalStudent,
+          teacher_name: kelas.dataValues.teacher.name,
+        });
+      }
     }
 
     return listClass;

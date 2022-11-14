@@ -1,4 +1,4 @@
-const teacherModel = require("../config/database/models").teacher;
+const teacherModel = require("../config/database/models").Teacher;
 
 class TeacherModel {
   static async getTeacher(id) {

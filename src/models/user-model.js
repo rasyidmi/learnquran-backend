@@ -1,5 +1,5 @@
 const { ApplicationError } = require("../helpers/error-template");
-const userModel = require("../config/database/models").user;
+const userModel = require("../config/database/models").User;
 
 class UserModel {
   static async createUser(data) {
