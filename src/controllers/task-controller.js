@@ -5,7 +5,7 @@ class TaskController {
   static async createTask(req, res, next) {
     const body = req.body;
     const teacherId = req.query.user_id;
-    const classId = body.class_id;
+    const classId = req.query.class_id;
     try {
       const createdTask = await taskModel.createTask(body, classId, teacherId);
       const response = Response.postResponse(
@@ -20,7 +20,7 @@ class TaskController {
 
   static async deleteTask(req, res, next) {
     const params = req.query;
-    const taskId = req.params.id;
+    const taskId = params.task_id;
     const teacherId = params.user_id;
     const classId = params.class_id;
 

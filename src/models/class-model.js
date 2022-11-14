@@ -1,8 +1,8 @@
 const sequelize = require("sequelize");
 const { ApplicationError } = require("../helpers/error-template");
-const classModel = require("../config/database/models").classes;
-const teacherModel = require("../config/database/models").teacher;
-const studentModel = require("../config/database/models").student;
+const classModel = require("../config/database/models").Classes;
+const teacherModel = require("../config/database/models").Teacher;
+const studentModel = require("../config/database/models").Student;
 
 class ClassModel {
   static async createClass(data, teacherId) {
@@ -14,6 +14,7 @@ class ClassModel {
     // Check if the current user is teacher or not.
     if (!teacher) throw new ApplicationError("User is not a teacher.", 400);
 
+    data.teacher_name = teacher.dataValues.name;
     const createdClass = await teacher.createClass(data);
     return createdClass;
   }

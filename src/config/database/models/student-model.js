@@ -1,11 +1,33 @@
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-  const student = sequelize.define(
-    "student",
+  class Student extends Model {
+    static associate(models) {
+      Student.hasMany(models.Certificate, {
+        foreignKey: "student_id",
+        onDelete: "CASCADE",
+      });
+      Student.belongsTo(models.User, {
+        foreignKey: "email_address",
+        onDelete: "CASCADE",
+      });
+      Student.belongsToMany(models.Classes, {
+        through: "StudentAndClass",
+        foreignKey: "student_id",
+        timestamps: false,
+      });
+      Student.hasMany(models.Submission, {
+        foreignKey: "student_id",
+        onDelete: "CASCADE",
+      });
+    }
+  }
+  Student.init(
     {
       id: {
         type: DataTypes.UUID,
         primaryKey: true,
-        defaultValue: sequelize.fn('uuid_generate_v4')
+        defaultValue: sequelize.fn("uuid_generate_v4"),
       },
       name: {
         type: DataTypes.STRING,
@@ -23,8 +45,9 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       timestamps: false,
+      sequelize,
+      modelName: "Student",
     }
   );
-
-  return student;
+  return Student;
 };

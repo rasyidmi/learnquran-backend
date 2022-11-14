@@ -1,6 +1,27 @@
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-  const submission = sequelize.define(
-    "submission",
+  class Submission extends Model {
+    static associate(models) {
+      Submission.belongsTo(models.Task, {
+        foreignKey: "task_id",
+        onDelete: "CASCADE",
+      });
+      Submission.belongsTo(models.Student, {
+        foreignKey: "student_id",
+        onDelete: "CASCADE",
+      });
+      Submission.belongsTo(models.Teacher, {
+        foreignKey: "teacher_id",
+        onDelete: "CASCADE",
+      });
+      Submission.belongsTo(models.Classes, {
+        foreignKey: "class_id",
+        onDelete: "CASCADE",
+      });
+    }
+  }
+  Submission.init(
     {
       score: {
         type: DataTypes.DOUBLE,
@@ -17,8 +38,9 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       timestamps: false,
+      sequelize,
+      modelName: "Submission",
     }
   );
-
-  return submission;
+  return Submission;
 };

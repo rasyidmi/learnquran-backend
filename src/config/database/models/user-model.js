@@ -1,6 +1,19 @@
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-  const user = sequelize.define(
-    "user",
+  class User extends Model {
+    static associate(models) {
+      User.hasOne(models.Teacher, {
+        foreignKey: "email_address",
+        onDelete: "CASCADE",
+      });
+      User.hasOne(models.Student, {
+        foreignKey: "email_address",
+        onDelete: "CASCADE",
+      });
+    }
+  }
+  User.init(
     {
       email_address: {
         type: DataTypes.STRING,
@@ -14,8 +27,9 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       timestamps: false,
+      sequelize,
+      modelName: "User",
     }
   );
-
-  return user;
+  return User;
 };

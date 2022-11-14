@@ -1,6 +1,19 @@
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-  const task = sequelize.define(
-    "task",
+  class Task extends Model {
+    static associate(models) {
+      Task.belongsTo(models.Classes, {
+        foreignKey: "class_id",
+        onDelete: "CASCADE",
+      });
+      Task.hasMany(models.Submission, {
+        foreignKey: "task_id",
+        onDelete: "CASCADE",
+      });
+    }
+  }
+  Task.init(
     {
       name: {
         type: DataTypes.STRING,
@@ -18,8 +31,9 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       timestamps: false,
+      sequelize,
+      modelName: "Task",
     }
   );
-
-  return task;
+  return Task;
 };

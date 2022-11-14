@@ -1,5 +1,5 @@
 const { ApplicationError } = require("../helpers/error-template");
-const submissionModel = require("../config/database/models").submission;
+const submissionModel = require("../config/database/models").Submission;
 const moment = require("moment");
 
 class SubmissionModel {

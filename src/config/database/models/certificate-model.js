@@ -1,6 +1,15 @@
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-  const certificate = sequelize.define(
-    "certificate",
+  class Certificate extends Model {
+    static associate(models) {
+      Certificate.belongsTo(models.Student, {
+        foreignKey: "student_id",
+        onDelete: "CASCADE",
+      });
+    }
+  }
+  Certificate.init(
     {
       author_name: {
         type: DataTypes.STRING,
@@ -17,8 +26,9 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       timestamps: false,
+      sequelize,
+      modelName: "Certificate",
     }
   );
-
-  return certificate;
+  return Certificate;
 };
