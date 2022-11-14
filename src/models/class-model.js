@@ -41,6 +41,11 @@ class ClassModel {
   }
 
   static async getAllClasses(body) {
+    const studentInstance = await studentModel.findOne({
+      where: {
+        id: body.studentId,
+      },
+    });
     const listClass = [];
     const query = {
       include: {
@@ -59,14 +64,17 @@ class ClassModel {
     }
     const classInstance = await classModel.findAll(query);
     for (const kelas of classInstance) {
-      const totalStudent = await kelas.countStudents();
-      listClass.push({
-        id: kelas.dataValues.id,
-        name: kelas.dataValues.name,
-        capacity: kelas.dataValues.capacity,
-        total_student: totalStudent,
-        teacher_name: kelas.dataValues.teacher.name,
-      });
+      // Exclude student enrolled class in search.
+      if (!(await kelas.hasStudent(studentInstance))) {
+        const totalStudent = await kelas.countStudents();
+        listClass.push({
+          id: kelas.dataValues.id,
+          name: kelas.dataValues.name,
+          capacity: kelas.dataValues.capacity,
+          total_student: totalStudent,
+          teacher_name: kelas.dataValues.teacher.name,
+        });
+      }
     }
 
     return listClass;

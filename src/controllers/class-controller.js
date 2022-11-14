@@ -21,8 +21,12 @@ class ClassController {
   }
 
   static async getAllClass(req, res, next) {
+    const studentId = req.query.user_id;
     try {
-      const allClasses = await classModel.getAllClasses({ condition: 0 });
+      const allClasses = await classModel.getAllClasses({
+        condition: 0,
+        studentId: studentId,
+      });
       const response = Response.getResponse(
         "The system successfully got all class data.",
         allClasses
@@ -62,12 +66,15 @@ class ClassController {
   }
 
   static async searchClasses(req, res, next) {
-    const keyword = req.query.keyword;
+    const params = req.query;
+    const keyword = params.keyword;
+    const studentId = params.user_id;
     try {
       // Search classes by their name.
       const fetchedClasses = await classModel.getAllClasses({
         condition: 1,
         keyword: keyword,
+        studentId: studentId,
       });
       const response = Response.getResponse(
         "The system successfully got all class data.",
