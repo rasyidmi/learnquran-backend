@@ -19,7 +19,7 @@ firebaseAdmin.initializeApp({
 
 // Connecting to database
 db.sequelize
-  .sync({ force: true })
+  .sync()
   .then(() => {
     console.log("Success sync to the database.");
   })
