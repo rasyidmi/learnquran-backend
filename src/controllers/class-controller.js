@@ -91,7 +91,7 @@ class ClassController {
     try {
       const fetchedClass = await classModel.getClassDetail(classId);
       // Add total students in the class.
-      const totalStudents = fetchedClass.students.length;
+      const totalStudents = fetchedClass.Students.length;
       fetchedClass.dataValues.total_students = totalStudents;
       // Add class tasks.
       const classTasks = await taskModel.getTasksByClass(classId);

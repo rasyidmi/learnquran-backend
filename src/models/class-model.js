@@ -83,12 +83,12 @@ class ClassModel {
 
   static async getClassDetail(id) {
     const classInstance = await classModel.findOne({
+      logging: console.log,
       where: {
         id: id,
       },
       include: {
         model: studentModel,
-        required: true,
         attributes: ["name"],
       },
     });
