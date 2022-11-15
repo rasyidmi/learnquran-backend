@@ -88,11 +88,19 @@ class ClassController {
 
   static async getClassDetail(req, res, next) {
     const classId = req.params.id;
+    const role = req.query.role;
+    const userId = req.query.user_id;
     try {
-      const fetchedClass = await classModel.getClassDetail(classId);
-      // Add total students in the class.
-      const totalStudents = fetchedClass.Students.length;
-      fetchedClass.dataValues.total_students = totalStudents;
+      const fetchedClass = await classModel.getClassDetail(
+        classId,
+        role,
+        userId
+      );
+      if (role == 1) {
+        // Add total students in the class.
+        const totalStudents = fetchedClass.Students.length;
+        fetchedClass.dataValues.total_students = totalStudents;
+      }
       // Add class tasks.
       const classTasks = await taskModel.getTasksByClass(classId);
       fetchedClass.dataValues.tasks = classTasks;
