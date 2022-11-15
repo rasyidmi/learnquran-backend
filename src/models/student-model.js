@@ -41,7 +41,7 @@ class StudentModel {
       await student.addClass(classInstance);
       return {
         student_id: userId,
-        clsas_id: classId,
+        class_id: classId,
       };
     } else {
       throw new ApplicationError(
@@ -77,7 +77,7 @@ class StudentModel {
 
       return {
         student_id: userId,
-        clsas_id: classId,
+        class_id: classId,
       };
     } else {
       throw new ApplicationError(
