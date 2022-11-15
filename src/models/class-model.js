@@ -73,7 +73,7 @@ class ClassModel {
           name: kelas.dataValues.name,
           capacity: kelas.dataValues.capacity,
           total_student: totalStudent,
-          teacher_name: kelas.dataValues.teacher.name,
+          teacher_name: kelas.dataValues.Teacher.name,
         });
       }
     }
