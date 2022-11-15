@@ -81,18 +81,31 @@ class ClassModel {
     return listClass;
   }
 
-  static async getClassDetail(id) {
+  static async getClassDetail(id, role, userId) {
+    let includeQuery;
+    if (role == 1) {
+      includeQuery = {
+        model: studentModel,
+        attributes: ["name"],
+      };
+    }
     const classInstance = await classModel.findOne({
-      logging: console.log,
       where: {
         id: id,
       },
-      include: {
-        model: studentModel,
-        attributes: ["name"],
-      },
+      include: includeQuery,
     });
     if (!classInstance) throw new ApplicationError("Class not found.", 404);
+    // If user is student, check whether the student enroll to the class.
+    if (role == 0) {
+      const studentInstance = await studentModel.findOne({
+        where: {
+          id: userId,
+        },
+      });
+      const isEnroll = await classInstance.hasStudent(studentInstance);
+      classInstance.dataValues.is_enrolled = isEnroll;
+    }
     return classInstance;
   }
 
