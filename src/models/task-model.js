@@ -31,20 +31,20 @@ class TaskModel {
   }
 
   static async getTasksByClass(classId) {
-    const task = await taskModel.findAll({
+    return await taskModel.findAll({
       where: { class_id: classId },
       attributes: ["id", "name", "description"],
     });
-    if (!task) throw new ApplicationError("Task not found.", 404);
-    return task;
   }
 
   static async getTaskDetail(taskId) {
-    return await taskModel.findOne({
+    const task = await taskModel.findOne({
       where: {
         id: taskId,
       },
     });
+    if (!task) throw new ApplicationError("Task is not found.", 400);
+    return task;
   }
 
   static async deleteTask(teacherId, taskId, classId) {
