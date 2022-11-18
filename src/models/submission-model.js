@@ -11,6 +11,14 @@ class SubmissionModel {
     return submission;
   }
 
+  static async getByStudentAndTaskId(studentId, taskId) {
+    const submission = await submissionModel.findOne({
+      where: { student_id: studentId, task_id: taskId },
+    });
+    if (!submission) throw new ApplicationError("Submission not found.", 404);
+    return submission;
+  }
+
   static async getByTaskAndStudent(taskId, studentId) {
     const submission = await submissionModel.findOne({
       where: {

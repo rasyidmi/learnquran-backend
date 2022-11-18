@@ -1,4 +1,5 @@
 const taskModel = require("../models/task-model");
+const submissionModel = require("../models/submission-model");
 const Response = require("../dto/response");
 
 class TaskController {
@@ -11,6 +12,31 @@ class TaskController {
       const response = Response.postResponse(
         "The system successfully created a task.",
         createdTask
+      );
+      return res.status(200).json(response);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async getTaskDetail(req, res, next) {
+    const params = req.query;
+    const studentId = params.student_id;
+    const taskId = req.params.id;
+
+    try {
+      const task = await taskModel.getTaskDetail(taskId);
+      const submission = await submissionModel.getByStudentAndTaskId(
+        studentId,
+        taskId
+      );
+
+      const response = Response.getResponse(
+        "The system successfully got a task.",
+        {
+          task: task,
+          submission: submission,
+        }
       );
       return res.status(200).json(response);
     } catch (error) {

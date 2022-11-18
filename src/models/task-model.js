@@ -37,6 +37,16 @@ class TaskModel {
     });
   }
 
+  static async getTaskDetail(taskId) {
+    const task = await taskModel.findOne({
+      where: {
+        id: taskId,
+      },
+    });
+    if (!task) throw new ApplicationError("Task is not found.", 400);
+    return task;
+  }
+
   static async deleteTask(teacherId, taskId, classId) {
     // Check whether user is the class teacher or not.
     const classInstance = await classModel.findOne({
