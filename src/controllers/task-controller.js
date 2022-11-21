@@ -31,10 +31,12 @@ class TaskController {
         studentId,
         taskId
       );
-      const audioUrl = await firebaseStorage.getSignedUrl(
-        submission.dataValues.audio_file
-      );
-      submission.dataValues.audio_file = audioUrl;
+      if (submission.dataValues.audio_file) {
+        const audioUrl = await firebaseStorage.getSignedUrl(
+          submission.dataValues.audio_file
+        );
+        submission.dataValues.audio_file_url = audioUrl;
+      }
 
       const response = Response.getResponse(
         "The system successfully got a task.",
