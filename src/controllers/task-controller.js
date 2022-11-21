@@ -1,5 +1,6 @@
 const taskModel = require("../models/task-model");
 const submissionModel = require("../models/submission-model");
+const firebaseStorage = require("../helpers/firebase-storage");
 const Response = require("../dto/response");
 
 class TaskController {
@@ -30,6 +31,10 @@ class TaskController {
         studentId,
         taskId
       );
+      const audioUrl = await firebaseStorage.getSignedUrl(
+        submission.dataValues.audio_file
+      );
+      submission.dataValues.audio_file = audioUrl;
 
       const response = Response.getResponse(
         "The system successfully got a task.",
