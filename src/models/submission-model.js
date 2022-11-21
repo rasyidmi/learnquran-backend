@@ -44,6 +44,17 @@ class SubmissionModel {
     });
   }
 
+  static async deleteAudio(submissionId) {
+    const submission = await submissionModel.findOne({
+      where: {
+        id: submissionId,
+      },
+    });
+    await submission.update({
+      audio_file: null,
+    });
+  }
+
   static async giveScore(submissionId, userId, data) {
     const submission = await submissionModel.findOne({
       where: {
@@ -57,6 +68,18 @@ class SubmissionModel {
         404
       );
     return await submission.update(data);
+  }
+
+  static async checkStudentSubmission(studentId, submissionId) {
+    const submission = await submissionModel.findOne({
+      where: {
+        id: submissionId,
+        student_id: studentId,
+      },
+    });
+    if (!submission)
+      throw new ApplicationError("User is not the submission owner.");
+    return submission;
   }
 }
 
