@@ -80,7 +80,7 @@ class SubmissionModel {
       },
     });
     if (!submission)
-      throw new ApplicationError("User is not the submission owner.");
+      throw new ApplicationError("User is not the submission owner.", 400);
     return submission;
   }
 }
