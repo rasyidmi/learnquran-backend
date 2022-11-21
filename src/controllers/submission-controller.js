@@ -5,6 +5,7 @@ const Response = require("../dto/response");
 class SubmissionController {
   static async uploadAudio(req, res, next) {
     const audioFile = req.file;
+    const body = req.body;
     const submissionId = req.params.id;
 
     try {
@@ -16,7 +17,11 @@ class SubmissionController {
         );
 
       const audioFileName = firebaseStorage.uploadFile(audioFile);
-      await submissionModel.uploadAudio(submissionId, audioFileName);
+      await submissionModel.uploadAudio(
+        submissionId,
+        audioFileName,
+        body.duration
+      );
       const response = Response.postResponse(
         "The system successfully uploaded the audio to the submission."
       );

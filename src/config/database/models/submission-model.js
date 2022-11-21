@@ -35,6 +35,9 @@ module.exports = (sequelize, DataTypes) => {
       audio_file: {
         type: DataTypes.STRING,
       },
+      duration: {
+        type: DataTypes.STRING,
+      },
     },
     {
       timestamps: false,

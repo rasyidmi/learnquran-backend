@@ -30,7 +30,7 @@ class SubmissionModel {
     return submission;
   }
 
-  static async uploadAudio(submissionId, audioFileName) {
+  static async uploadAudio(submissionId, audioFileName, duration) {
     const currentTime = moment();
     const submission = await submissionModel.findOne({
       where: {
@@ -40,6 +40,7 @@ class SubmissionModel {
 
     await submission.update({
       audio_file: audioFileName,
+      duration: duration,
       updated_date: currentTime,
     });
   }
@@ -52,6 +53,7 @@ class SubmissionModel {
     });
     await submission.update({
       audio_file: null,
+      duration: null,
     });
   }
 
