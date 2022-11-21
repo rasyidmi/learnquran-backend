@@ -47,6 +47,32 @@ class SubmissionController {
     }
   }
 
+  static async deleteAudio(req, res, next) {
+    const submissionId = req.params.id;
+    const studentId = req.query.user_id;
+
+    try {
+      // Check whether the user is the owner of the submission.
+      const submissionInstance = await submissionModel.checkStudentSubmission(
+        studentId,
+        submissionId
+      );
+      if (submissionInstance) {
+        await firebaseStorage.deleteFile(
+          submissionInstance.dataValues.audio_file
+        );
+        await submissionModel.deleteAudio(submissionId);
+
+        const response = Response.deleteResponse(
+          "The system successfully deleted the audio of the submission."
+        );
+        return res.status(200).json(response);
+      }
+    } catch (error) {
+      next(error);
+    }
+  }
+
   static async giveScore(req, res, next) {
     const userId = req.query.user_id;
     const submissionId = req.params.id;
