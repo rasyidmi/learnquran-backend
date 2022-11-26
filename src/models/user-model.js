@@ -66,7 +66,11 @@ class UserModel {
 
     const studentInstance = await userInstance.getStudent();
     const teacherInstance = await userInstance.getTeacher();
-    if (studentInstance) return studentInstance;
+    if (studentInstance){
+      studentInstance.dataValues.role = 0;
+      return studentInstance;
+    } 
+    teacherInstance.dataValues.role = 1;
     return teacherInstance;
   }
 }
