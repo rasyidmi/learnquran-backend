@@ -68,7 +68,18 @@ class TaskModel {
       await taskInstance.destroy();
       return;
     }
-    throw new ApplicationError("Task is not found.", 404);
+    throw new ApplicationError("Task not found.", 404);
+  }
+
+  static async updateTaskById(taskId, newData) {
+    const taskInstance = await taskModel.findOne({
+      where: {
+        id: taskId,
+      },
+    });
+    if (!taskInstance) throw new ApplicationError("Task not found.", 404);
+    const updatedData = await taskInstance.update(newData);
+    return updatedData;
   }
 }
 
