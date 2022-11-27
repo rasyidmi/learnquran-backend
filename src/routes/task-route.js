@@ -7,5 +7,6 @@ router.use(userAuthorization);
 router.get("/:id", taskController.getTaskDetail);
 router.post("/create", taskController.createTask);
 router.delete("/delete", taskController.deleteTask);
+router.put("/update", taskController.updateTask);
 
 module.exports = router;

@@ -62,6 +62,22 @@ class TaskController {
       const response = Response.deleteResponse(
         "The system successfully deleted a task."
       );
+      return res.status(200).json(x);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async updateTask(req, res, next) {
+    const taskId = req.query.task_id;
+    const data = req.body;
+
+    try {
+      const updatedInstance = await taskModel.updateTaskById(taskId, data);
+      const response = Response.putResponse(
+        "The system successfully updated a task.",
+        updatedInstance
+      );
       return res.status(200).json(response);
     } catch (error) {
       next(error);
