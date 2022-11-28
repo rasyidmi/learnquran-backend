@@ -29,6 +29,9 @@ class StudentModel {
         attributes: ["gender"],
       },
     });
+    // Check if the user already enrolled.
+    const isEnroll = await classInstance.hasStudent(student);
+    if (isEnroll) throw new ApplicationError("Student already enrolled.", 400);
 
     // Check whether the class capacity is enough or not.
     // AND the gender.
