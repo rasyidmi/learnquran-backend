@@ -39,6 +39,16 @@ class StudentModel {
     ) {
       // Assign the user to the desired class.
       await student.addClass(classInstance);
+      // Create the submission for existing task in the class.
+      const tasks = await classInstance.getTasks();
+      for (var i = 0; i < tasks.length; i++) {
+        await submissionModel.create({
+          class_id: classId,
+          student_id: userId,
+          task_id: tasks.dataValues.id,
+          teacher_id: classInstance.dataValues.teacher_id,
+        });
+      }
       return {
         student_id: userId,
         class_id: classId,
