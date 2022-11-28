@@ -20,6 +20,23 @@ class TaskController {
     }
   }
 
+  static async getAllStudentTask(req, res, next) {
+    const params = req.query;
+    const studentId = params.student_id;
+    const classId = params.class_id;
+
+    try {
+      const resss = await taskModel.getStudentTasksByClass(studentId, classId);
+      const response = Response.getResponse(
+        "The system successfully created a task.",
+        resss
+      );
+      return res.status(200).json(response);
+    } catch (error) {
+      next(error);
+    }
+  }
+
   static async getTaskDetail(req, res, next) {
     const params = req.query;
     const studentId = params.student_id;

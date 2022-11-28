@@ -1,6 +1,8 @@
+const e = require("express");
 const { ApplicationError } = require("../helpers/error-template");
 const classModel = require("../config/database/models").Classes;
 const taskModel = require("../config/database/models").Task;
+const submissionModel = require("../config/database/models").Submission;
 
 class TaskModel {
   static async createTask(data, classId, teacherId) {
@@ -28,6 +30,30 @@ class TaskModel {
       return task;
     }
     throw new ApplicationError("User is not the teacher of the class.", 404);
+  }
+
+  static async getStudentTasksByClass(studentId, classId) {
+    const taskInstances = await taskModel.findAll({
+      where: { class_id: classId },
+      attributes: ["id", "name", "description"],
+      include: {
+        model: submissionModel,
+        attributes: ["id", "score", "audio_file"],
+        where: {
+          student_id: studentId,
+        },
+        required: true,
+      },
+    });
+
+    for (var i = 0; i < taskInstances.length; i++) {
+      if (taskInstances[i].Submissions[0].dataValues.score)
+        taskInstances[i].Submissions[0].dataValues.status = "Telah dinilai";
+      else if (taskInstances[i].Submissions[0].dataValues.audio_file)
+        taskInstances[i].Submissions[0].dataValues.status = "Sudah submit";
+      else taskInstances[i].Submissions[0].dataValues.status = "Belum submit";
+    }
+    return taskInstances;
   }
 
   static async getTasksByClass(classId) {
