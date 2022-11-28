@@ -62,7 +62,7 @@ class TaskController {
       const response = Response.deleteResponse(
         "The system successfully deleted a task."
       );
-      return res.status(200).json(x);
+      return res.status(200).json(response);
     } catch (error) {
       next(error);
     }
