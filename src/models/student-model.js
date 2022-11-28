@@ -45,7 +45,7 @@ class StudentModel {
         await submissionModel.create({
           class_id: classId,
           student_id: userId,
-          task_id: tasks.dataValues.id,
+          task_id: tasks[0].dataValues.id,
           teacher_id: classInstance.dataValues.teacher_id,
         });
       }
